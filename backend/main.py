@@ -268,6 +268,43 @@ async def pipeline_run_events(run_id: str):
                              headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
 
+@app.get("/api/pipeline/runs/{run_id}/best-prompt")
+async def get_best_prompt(run_id: str):
+    """Return the best tuned extraction prompt across all files in a run.
+    Picks the prompt from the file with the highest accuracy."""
+    run = store.get_run(run_id)
+    if not run:
+        raise HTTPException(status_code=404, detail="Run not found")
+
+    files = run.get("files", [])
+    # Find the file with the highest accuracy that has a final_prompt
+    best_file = None
+    for f in files:
+        if f.get("final_prompt") and (
+            best_file is None or (f.get("accuracy") or 0) > (best_file.get("accuracy") or 0)
+        ):
+            best_file = f
+
+    if not best_file or not best_file.get("final_prompt"):
+        raise HTTPException(
+            status_code=404,
+            detail="No tuned prompt found. Run a pipeline with auto_tune=true first.",
+        )
+
+    return {
+        "run_id": run_id,
+        "from_file": best_file["filename"],
+        "accuracy": best_file.get("accuracy"),
+        "prompt": best_file["final_prompt"],
+        "ready_to_use": {
+            "extraction_prompt": best_file["final_prompt"],
+            "auto_tune": False,
+            "accuracy_threshold": 85,
+            "max_iterations": 1,
+        },
+    }
+
+
 @app.get("/api/pipeline/runs/{run_id}/export")
 async def export_pipeline_run(run_id: str):
     """Download pipeline run results as a formatted Excel workbook."""

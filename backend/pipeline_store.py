@@ -51,6 +51,7 @@ def init_db() -> None:
             extraction      TEXT,   -- JSON
             judge_result    TEXT,   -- JSON
             autotune_iters  TEXT,   -- JSON
+            final_prompt    TEXT,   -- best prompt after autotune
             error           TEXT,
             started_at      TEXT,
             completed_at    TEXT,
@@ -161,8 +162,18 @@ def get_files(run_id: str) -> list:
                         d[col] = json.loads(d[col])
                     except Exception:
                         pass
+            # final_prompt is plain text — leave as-is
             result.append(d)
         return result
 
 
+def _migrate() -> None:
+    """Add columns introduced after initial schema without dropping data."""
+    with _lock, _conn() as conn:
+        existing = {row[1] for row in conn.execute("PRAGMA table_info(pipeline_files)")}
+        if "final_prompt" not in existing:
+            conn.execute("ALTER TABLE pipeline_files ADD COLUMN final_prompt TEXT")
+
+
 init_db()
+_migrate()

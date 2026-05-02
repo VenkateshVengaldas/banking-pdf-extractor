@@ -117,6 +117,7 @@ async def process_file(
         final_extracted = best.get("extracted", {})
         final_accuracy = float(result.get("best_accuracy", 0))
         initial_accuracy = float(result["iterations"][0]["accuracy"]) if result["iterations"] else 0
+        final_prompt = result.get("final_prompt") or ""
 
         store.update_file(
             run_id, filename,
@@ -126,6 +127,7 @@ async def process_file(
             extraction=final_extracted,
             judge_result=best.get("judge_result"),
             autotune_iters=iterations_log,
+            final_prompt=final_prompt,
             completed_at=store._now(),
         )
         await _emit(event_callback, {

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowLeft, CheckCircle, XCircle, Loader2, Clock,
-  Download, TrendingUp, RefreshCw, AlertCircle
+  Download, TrendingUp, RefreshCw, AlertCircle, Wand2, Copy, Check
 } from "lucide-react";
 import type { PipelineFile, PipelineRun, PipelineSSEEvent } from "../types";
 
@@ -139,6 +139,38 @@ export default function PipelineRunDetail({ run: initialRun, onBack, onRunUpdate
   const [liveEvents, setLiveEvents] = useState<string[]>([]);
   const eventsRef = useRef<HTMLDivElement>(null);
 
+  // Best-prompt panel
+  const [promptData, setPromptData] = useState<{
+    prompt: string; from_file: string; accuracy: number; ready_to_use: object;
+  } | null>(null);
+  const [promptLoading, setPromptLoading] = useState(false);
+  const [promptError, setPromptError] = useState<string | null>(null);
+  const [copied, setCopied] = useState<"prompt" | "json" | null>(null);
+
+  const fetchBestPrompt = async () => {
+    setPromptLoading(true);
+    setPromptError(null);
+    try {
+      const res = await fetch(`/api/pipeline/runs/${run.run_id}/best-prompt`);
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.detail || "Failed to fetch prompt");
+      }
+      setPromptData(await res.json());
+    } catch (e) {
+      setPromptError(String(e));
+    } finally {
+      setPromptLoading(false);
+    }
+  };
+
+  const copyToClipboard = (text: string, key: "prompt" | "json") => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(key);
+      setTimeout(() => setCopied(null), 2000);
+    });
+  };
+
   // Live SSE subscription while run is active
   useEffect(() => {
     if (run.status === "complete" || run.status === "failed") return;
@@ -216,13 +248,26 @@ export default function PipelineRunDetail({ run: initialRun, onBack, onRunUpdate
           </h2>
           <p className="text-xs text-slate-500">{run.folder_path} · {run.created_at.slice(0, 19).replace("T", " ")} UTC</p>
         </div>
-        <button
-          onClick={handleExport}
-          disabled={isRunning}
-          className="flex items-center gap-2 rounded-lg border border-slate-600 bg-slate-800 px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 disabled:opacity-40 transition-colors"
-        >
-          <Download className="h-4 w-4" /> Export Excel
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={fetchBestPrompt}
+            disabled={isRunning || promptLoading}
+            title="Get the best tuned prompt to reuse in future pipeline runs"
+            className="flex items-center gap-2 rounded-lg border border-indigo-700 bg-indigo-900/40 px-4 py-2 text-sm text-indigo-300 hover:bg-indigo-900/70 disabled:opacity-40 transition-colors"
+          >
+            {promptLoading
+              ? <Loader2 className="h-4 w-4 animate-spin" />
+              : <Wand2 className="h-4 w-4" />}
+            Get Tuned Prompt
+          </button>
+          <button
+            onClick={handleExport}
+            disabled={isRunning}
+            className="flex items-center gap-2 rounded-lg border border-slate-600 bg-slate-800 px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 disabled:opacity-40 transition-colors"
+          >
+            <Download className="h-4 w-4" /> Export Excel
+          </button>
+        </div>
       </div>
 
       {/* Stats row */}
@@ -275,6 +320,66 @@ export default function PipelineRunDetail({ run: initialRun, onBack, onRunUpdate
           Max iterations: {run.settings.max_iterations}
         </span>
       </div>
+
+      {/* Tuned Prompt Panel */}
+      {promptError && (
+        <div className="rounded-lg border border-red-800 bg-red-950/30 px-4 py-3 text-sm text-red-300">
+          {promptError}
+        </div>
+      )}
+      {promptData && (
+        <div className="rounded-xl border border-indigo-800 bg-indigo-950/30 p-5 space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-semibold text-indigo-300 flex items-center gap-2">
+                <Wand2 className="h-4 w-4" /> Best Tuned Prompt
+              </h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                From: <span className="text-slate-400">{promptData.from_file}</span>
+                {" · "}Accuracy: <span className="text-emerald-400 font-bold">{promptData.accuracy?.toFixed(1)}%</span>
+              </p>
+            </div>
+            <button
+              onClick={() => setPromptData(null)}
+              className="text-slate-600 hover:text-slate-400 text-xs"
+            >✕ close</button>
+          </div>
+
+          {/* Ready-to-use JSON */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                Paste into Pipeline Settings JSON
+              </p>
+              <button
+                onClick={() => copyToClipboard(JSON.stringify(promptData.ready_to_use, null, 2), "json")}
+                className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
+              >
+                {copied === "json" ? <><Check className="h-3.5 w-3.5" /> Copied!</> : <><Copy className="h-3.5 w-3.5" /> Copy JSON</>}
+              </button>
+            </div>
+            <pre className="rounded-lg bg-slate-900 border border-slate-700 p-3 text-xs text-slate-300 overflow-x-auto whitespace-pre-wrap">
+              {JSON.stringify(promptData.ready_to_use, null, 2)}
+            </pre>
+          </div>
+
+          {/* Raw prompt */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Raw Prompt Text</p>
+              <button
+                onClick={() => copyToClipboard(promptData.prompt, "prompt")}
+                className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
+              >
+                {copied === "prompt" ? <><Check className="h-3.5 w-3.5" /> Copied!</> : <><Copy className="h-3.5 w-3.5" /> Copy Prompt</>}
+              </button>
+            </div>
+            <div className="max-h-48 overflow-y-auto rounded-lg bg-slate-900 border border-slate-700 p-3 text-xs text-slate-400 whitespace-pre-wrap scrollbar-thin">
+              {promptData.prompt}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Files table */}
       <div className="overflow-hidden rounded-xl border border-slate-700">
