@@ -1,3 +1,5 @@
+// ── Single-file extraction types ─────────────────────────────────────────────
+
 export interface FieldScore {
   status: "correct" | "incorrect" | "missing" | "acceptable" | "partial";
   extracted_value: string | null;
@@ -71,4 +73,62 @@ export interface SSEEvent {
   converged?: boolean;
   extracted?: Record<string, string | null>;
   judge_result?: JudgeResult;
+}
+
+// ── Pipeline types ────────────────────────────────────────────────────────────
+
+export interface PipelineSettings {
+  extraction_prompt: string | null;
+  auto_tune: boolean;
+  accuracy_threshold: number;
+  max_iterations: number;
+}
+
+export interface PipelineFile {
+  id: number;
+  run_id: string;
+  filename: string;
+  status: "pending" | "running" | "complete" | "failed";
+  accuracy: number | null;
+  initial_accuracy: number | null;
+  extraction: Record<string, string | null> | null;
+  judge_result: JudgeResult | null;
+  autotune_iters: Array<{ iteration: number; accuracy: number; judge_result: JudgeResult }> | null;
+  error: string | null;
+  started_at: string | null;
+  completed_at: string | null;
+}
+
+export interface PipelineRun {
+  run_id: string;
+  created_at: string;
+  completed_at: string | null;
+  folder_path: string;
+  settings: PipelineSettings;
+  status: "pending" | "running" | "complete" | "failed";
+  total_files: number;
+  processed: number;
+  succeeded: number;
+  failed: number;
+  avg_accuracy: number | null;
+  files: PipelineFile[];
+}
+
+export interface PipelineSSEEvent {
+  type: string;
+  run_id?: string;
+  filename?: string;
+  message?: string;
+  accuracy?: number;
+  extraction?: Record<string, string | null>;
+  judge_result?: JudgeResult;
+  processed?: number;
+  total?: number;
+  succeeded?: number;
+  failed?: number;
+  avg_accuracy?: number | null;
+  run?: PipelineRun;
+  iteration?: number;
+  max_iterations?: number;
+  threshold?: number;
 }

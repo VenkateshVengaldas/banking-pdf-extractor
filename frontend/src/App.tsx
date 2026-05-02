@@ -1,11 +1,12 @@
 import { useState, useCallback } from "react";
-import { Building2, Activity, FileSearch } from "lucide-react";
+import { Building2, Activity, FileSearch, Layers } from "lucide-react";
 import PDFUpload from "./components/PDFUpload";
 import ProcessingPanel from "./components/ProcessingPanel";
 import ResultsPanel from "./components/ResultsPanel";
+import PipelineTab from "./components/PipelineTab";
 import type { SSEEvent, FileResult } from "./types";
 
-type Tab = "upload" | "processing" | "results";
+type Tab = "upload" | "processing" | "results" | "pipeline";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>("upload");
@@ -105,6 +106,7 @@ export default function App() {
       icon: <Building2 className="h-4 w-4" />,
       badge: results.length > 0 ? results.length : undefined,
     },
+    { id: "pipeline", label: "Pipeline", icon: <Layers className="h-4 w-4" /> },
   ];
 
   return (
@@ -211,6 +213,8 @@ export default function App() {
             </div>
           </div>
         )}
+
+        {activeTab === "pipeline" && <PipelineTab />}
 
         {activeTab === "results" && (
           <div>
