@@ -17,7 +17,7 @@ export default function App() {
   const handleProcess = useCallback(
     async (
       files: File[],
-      options: { accuracyThreshold: number; maxIterations: number; customPrompt: string }
+      options: { accuracyThreshold: number; maxIterations: number; customPrompt: string; mockMode: boolean }
     ) => {
       setIsProcessing(true);
       setEvents([]);
@@ -30,6 +30,9 @@ export default function App() {
       formData.append("max_iterations", String(options.maxIterations));
       if (options.customPrompt) {
         formData.append("custom_prompt", options.customPrompt);
+      }
+      if (options.mockMode) {
+        formData.append("mock_mode", "true");
       }
 
       try {

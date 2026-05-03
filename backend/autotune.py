@@ -103,7 +103,19 @@ async def autotune(
     accuracy_threshold: float = 85.0,
     max_iterations: int = 3,
     progress_callback: Optional[Callable] = None,
+    mock: bool = False,
 ) -> dict:
+    """Run the OPRO auto-tune loop.
+
+    Set mock=True for development — no LLM calls, instant results with
+    realistic improving accuracy across iterations.
+    """
+    if mock:
+        from mock_data import mock_autotune
+        return await mock_autotune(
+            pdf_data, initial_prompt, accuracy_threshold, max_iterations, progress_callback
+        )
+
     current_prompt = initial_prompt
     iterations = []
     best_result = None
@@ -116,26 +128,40 @@ async def autotune(
     for i in range(max_iterations):
         iter_num = i + 1
 
+        # ── Step 1: Extraction ────────────────────────────────────────────────
         await emit({
-            "type": "autotune_iteration",
+            "type": "autotune_step",
             "iteration": iter_num,
             "max_iterations": max_iterations,
-            "message": f"Auto-tune iteration {iter_num}/{max_iterations} — extracting...",
+            "step": "extracting",
+            "message": f"[{iter_num}/{max_iterations}] 🔍 Calling Gemini → extracting fields from document...",
         })
 
-        # --- Extract ---
         try:
             extracted = extract_fields(client, model_name, pdf_data, current_prompt)
         except Exception as e:
             extracted = {}
-            await emit({"type": "autotune_warning", "iteration": iter_num,
-                         "message": f"Extraction error: {e}"})
+            await emit({
+                "type": "autotune_warning", "iteration": iter_num,
+                "message": f"[{iter_num}/{max_iterations}] ⚠ Extraction error: {e}",
+            })
 
-        # --- Judge ---
+        field_count = sum(1 for v in extracted.values() if v is not None)
         await emit({
-            "type": "autotune_iteration",
+            "type": "autotune_step",
             "iteration": iter_num,
-            "message": f"Auto-tune iteration {iter_num}/{max_iterations} — judging accuracy...",
+            "max_iterations": max_iterations,
+            "step": "extracted",
+            "message": f"[{iter_num}/{max_iterations}] ✓ Extraction complete — {field_count} field(s) returned",
+        })
+
+        # ── Step 2: Judge ─────────────────────────────────────────────────────
+        await emit({
+            "type": "autotune_step",
+            "iteration": iter_num,
+            "max_iterations": max_iterations,
+            "step": "judging",
+            "message": f"[{iter_num}/{max_iterations}] ⚖️  LLM Judge evaluating field accuracy...",
         })
 
         try:
@@ -147,10 +173,35 @@ async def autotune(
                 "overall_feedback": str(e),
                 "improvement_suggestions": [],
             }
-            await emit({"type": "autotune_warning", "iteration": iter_num,
-                         "message": f"Judge error: {e}"})
+            await emit({
+                "type": "autotune_warning", "iteration": iter_num,
+                "message": f"[{iter_num}/{max_iterations}] ⚠ Judge error: {e}",
+            })
 
         accuracy = float(judge_result.get("overall_accuracy", 0))
+        field_scores = judge_result.get("field_scores", {})
+
+        correct   = sum(1 for s in field_scores.values() if s.get("status") in ("correct", "acceptable"))
+        incorrect = sum(1 for s in field_scores.values() if s.get("status") == "incorrect")
+        missing   = sum(1 for s in field_scores.values() if s.get("status") == "missing")
+        partial   = sum(1 for s in field_scores.values() if s.get("status") == "partial")
+        failed_fields = [f for f, s in field_scores.items() if s.get("status") not in ("correct", "acceptable")]
+
+        await emit({
+            "type": "autotune_judge_result",
+            "iteration": iter_num,
+            "max_iterations": max_iterations,
+            "accuracy": accuracy,
+            "correct": correct,
+            "incorrect": incorrect,
+            "missing": missing,
+            "partial": partial,
+            "failed_fields": failed_fields,
+            "message": (
+                f"[{iter_num}/{max_iterations}] Judge: {accuracy:.0f}% — "
+                f"✓{correct} correct  ✗{incorrect} wrong  ∅{missing} missing  ~{partial} partial"
+            ),
+        })
 
         iteration_record = {
             "iteration": iter_num,
@@ -168,28 +219,35 @@ async def autotune(
         await emit({
             "type": "autotune_iteration_complete",
             "iteration": iter_num,
+            "max_iterations": max_iterations,
             "accuracy": accuracy,
             "threshold": accuracy_threshold,
             "extracted": extracted,
             "judge_result": judge_result,
-            "message": f"Iteration {iter_num} — accuracy: {accuracy:.0f}% (target: {accuracy_threshold:.0f}%)",
+            "message": f"Iteration {iter_num}/{max_iterations} complete — accuracy: {accuracy:.0f}% (target: {accuracy_threshold:.0f}%)",
         })
 
-        converged_early = accuracy >= accuracy_threshold
-        if converged_early:
+        if accuracy >= accuracy_threshold:
             await emit({
                 "type": "autotune_converged",
                 "accuracy": accuracy,
                 "iterations": iter_num,
-                "message": f"Target reached at {accuracy:.0f}% — continuing remaining iterations to confirm best result.",
+                "message": f"✓ Target {accuracy_threshold:.0f}% reached at {accuracy:.0f}% — continuing remaining iterations to confirm best.",
             })
 
-        # Always generate improved prompt (except after the last iteration)
+        # ── Step 3: Prompt optimisation ───────────────────────────────────────
         if i < max_iterations - 1:
+            old_len = len(current_prompt)
             await emit({
-                "type": "autotune_iteration",
+                "type": "autotune_step",
                 "iteration": iter_num,
-                "message": f"Accuracy {accuracy:.0f}% < {accuracy_threshold:.0f}% — generating improved prompt...",
+                "max_iterations": max_iterations,
+                "step": "optimizing",
+                "message": (
+                    f"[{iter_num}/{max_iterations}] 🔄 Optimizer LLM rewriting prompt"
+                    + (f" (fixing: {', '.join(failed_fields[:3])}{'…' if len(failed_fields) > 3 else ''})" if failed_fields else "")
+                    + "..."
+                ),
             })
 
             try:
@@ -200,14 +258,20 @@ async def autotune(
                 improved = response.text.strip()
                 if improved:
                     current_prompt = improved
+                    new_len = len(current_prompt)
                     await emit({
                         "type": "autotune_prompt_updated",
                         "iteration": iter_num,
-                        "message": "Prompt updated — starting next iteration.",
+                        "max_iterations": max_iterations,
+                        "old_length": old_len,
+                        "new_length": new_len,
+                        "message": f"[{iter_num}/{max_iterations}] ✎ Prompt updated ({old_len} → {new_len} chars) — starting next iteration.",
                     })
             except Exception as e:
-                await emit({"type": "autotune_warning", "iteration": iter_num,
-                             "message": f"Optimizer error: {e} — keeping current prompt."})
+                await emit({
+                    "type": "autotune_warning", "iteration": iter_num,
+                    "message": f"[{iter_num}/{max_iterations}] ⚠ Optimizer error: {e} — keeping current prompt.",
+                })
 
     return {
         "iterations": iterations,

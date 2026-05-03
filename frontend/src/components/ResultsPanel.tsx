@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CheckCircle, XCircle, AlertCircle, MinusCircle, ChevronDown, ChevronUp, TrendingUp } from "lucide-react";
+import { CheckCircle, XCircle, AlertCircle, MinusCircle, ChevronDown, ChevronUp, TrendingUp, Wand2, Copy, Check } from "lucide-react";
 import type { FileResult, FieldScore, AutotuneIteration } from "../types";
 
 interface Props {
@@ -212,6 +212,84 @@ function AutotuneTimeline({ iterations }: { iterations: AutotuneIteration[] }) {
   );
 }
 
+function TunedPromptPanel({ finalPrompt, accuracy }: { finalPrompt: string; accuracy: number }) {
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState<"json" | "prompt" | null>(null);
+
+  const readyJson = JSON.stringify(
+    { extraction_prompt: finalPrompt, auto_tune: false, accuracy_threshold: 85, max_iterations: 1 },
+    null,
+    2
+  );
+
+  const copy = (text: string, key: "json" | "prompt") => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(key);
+      setTimeout(() => setCopied(null), 2000);
+    });
+  };
+
+  return (
+    <div className="rounded-xl border border-indigo-800/50 bg-indigo-950/20 overflow-hidden">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="flex w-full items-center gap-2 px-4 py-3 text-left hover:bg-indigo-950/30 transition-colors"
+      >
+        <Wand2 className="h-4 w-4 text-indigo-400 shrink-0" />
+        <div className="flex-1">
+          <span className="text-sm font-semibold text-indigo-300">Tuned Prompt — ready to reuse</span>
+          <span className="ml-2 text-xs text-indigo-600">
+            Best prompt from this run (accuracy: {accuracy.toFixed(0)}%)
+          </span>
+        </div>
+        {open ? <ChevronUp className="h-4 w-4 text-slate-500" /> : <ChevronDown className="h-4 w-4 text-slate-500" />}
+      </button>
+
+      {open && (
+        <div className="border-t border-indigo-800/40 px-4 pb-4 pt-3 space-y-3">
+          {/* Ready-to-use Pipeline JSON */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
+                Pipeline Settings JSON (paste into New Pipeline Run)
+              </p>
+              <button
+                onClick={() => copy(readyJson, "json")}
+                className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
+              >
+                {copied === "json"
+                  ? <><Check className="h-3.5 w-3.5" /> Copied!</>
+                  : <><Copy className="h-3.5 w-3.5" /> Copy JSON</>}
+              </button>
+            </div>
+            <pre className="rounded-lg border border-slate-700 bg-slate-900 p-3 text-xs text-slate-300 overflow-x-auto whitespace-pre-wrap">
+              {readyJson}
+            </pre>
+          </div>
+
+          {/* Raw prompt */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Raw Prompt</p>
+              <button
+                onClick={() => copy(finalPrompt, "prompt")}
+                className="flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
+              >
+                {copied === "prompt"
+                  ? <><Check className="h-3.5 w-3.5" /> Copied!</>
+                  : <><Copy className="h-3.5 w-3.5" /> Copy Prompt</>}
+              </button>
+            </div>
+            <div className="max-h-40 overflow-y-auto rounded-lg border border-slate-700 bg-slate-900 p-3 text-xs text-slate-400 whitespace-pre-wrap scrollbar-thin">
+              {finalPrompt}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function FileResultCard({ result }: { result: FileResult }) {
   const [showInitial, setShowInitial] = useState(false);
   const improved = result.autotune !== null;
@@ -297,6 +375,14 @@ function FileResultCard({ result }: { result: FileResult }) {
               </div>
             )}
           </div>
+        )}
+
+        {/* Tuned prompt — always shown when autotune ran */}
+        {result.autotune?.final_prompt && (
+          <TunedPromptPanel
+            finalPrompt={result.autotune.final_prompt}
+            accuracy={result.final_accuracy}
+          />
         )}
       </div>
     </div>

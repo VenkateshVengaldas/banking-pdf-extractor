@@ -63,13 +63,18 @@ async def process_pdfs(
     accuracy_threshold: float = Form(default=85.0),
     max_iterations: int = Form(default=3),
     custom_prompt: Optional[str] = Form(default=None),
+    mock_mode: bool = Form(default=False),
 ):
     async def generate():
-        try:
-            client, model_name = _get_client()
-        except Exception as e:
-            yield _sse({"type": "error", "message": str(e)})
-            return
+        client, model_name = None, None
+        if not mock_mode:
+            try:
+                client, model_name = _get_client()
+            except Exception as e:
+                yield _sse({"type": "error", "message": str(e)})
+                return
+        else:
+            model_name = "mock"
 
         all_results = []
 
@@ -79,7 +84,7 @@ async def process_pdfs(
             yield _sse({
                 "type": "file_start", "filename": filename,
                 "file_index": file_idx, "total_files": len(files),
-                "message": f"Processing {filename} ({file_idx + 1}/{len(files)})...",
+                "message": f"{'[MOCK] ' if mock_mode else ''}Processing {filename} ({file_idx + 1}/{len(files)})...",
             })
 
             with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
@@ -87,16 +92,22 @@ async def process_pdfs(
                 tmp_path = tmp.name
 
             try:
-                yield _sse({"type": "step", "step": "pdf_extraction", "filename": filename,
-                             "message": "Extracting text and images from PDF..."})
-                pdf_data = extract_text_from_pdf(tmp_path)
-                yield _sse({"type": "step_complete", "step": "pdf_extraction", "filename": filename,
-                             "message": f"PDF processed — {pdf_data['page_count']} page(s), "
-                                        f"{'scanned' if pdf_data['is_scanned'] else 'text-based'}"})
+                if mock_mode:
+                    # In mock mode, skip real PDF parsing — use a minimal stub
+                    pdf_data = {"page_count": 3, "is_scanned": False, "text": "[mock pdf text]", "images": []}
+                    yield _sse({"type": "step_complete", "step": "pdf_extraction", "filename": filename,
+                                 "message": "[MOCK] PDF skipped — using mock data (3 pages, text-based)"})
+                else:
+                    yield _sse({"type": "step", "step": "pdf_extraction", "filename": filename,
+                                 "message": "Extracting text and images from PDF..."})
+                    pdf_data = extract_text_from_pdf(tmp_path)
+                    yield _sse({"type": "step_complete", "step": "pdf_extraction", "filename": filename,
+                                 "message": f"PDF processed — {pdf_data['page_count']} page(s), "
+                                            f"{'scanned' if pdf_data['is_scanned'] else 'text-based'}"})
 
                 initial_prompt = build_extraction_prompt(custom_prompt)
                 yield _sse({"type": "step", "step": "autotune", "filename": filename,
-                             "message": f"Starting OPRO auto-tune — {max_iterations} iteration(s)..."})
+                             "message": f"{'[MOCK] ' if mock_mode else ''}Starting OPRO auto-tune — {max_iterations} iteration(s)..."})
 
                 events_queue: asyncio.Queue = asyncio.Queue()
 
@@ -107,7 +118,8 @@ async def process_pdfs(
                     autotune(client, model_name, pdf_data, initial_prompt,
                              accuracy_threshold=accuracy_threshold,
                              max_iterations=max_iterations,
-                             progress_callback=progress_callback)
+                             progress_callback=progress_callback,
+                             mock=mock_mode)
                 )
 
                 while not autotune_task.done():
@@ -127,7 +139,7 @@ async def process_pdfs(
                 initial_judge = autotune_result["iterations"][0]["judge_result"] if autotune_result["iterations"] else {}
 
                 yield _sse({"type": "step_complete", "step": "autotune", "filename": filename,
-                             "message": f"Done — best accuracy: {final_accuracy:.0f}%",
+                             "message": f"{'[MOCK] ' if mock_mode else ''}Done — best accuracy: {final_accuracy:.0f}%",
                              "converged": autotune_result["converged"]})
 
                 result = {

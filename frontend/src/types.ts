@@ -73,6 +73,17 @@ export interface SSEEvent {
   converged?: boolean;
   extracted?: Record<string, string | null>;
   judge_result?: JudgeResult;
+  // autotune_step sub-fields
+  step_name?: string;
+  // autotune_judge_result sub-fields
+  correct?: number;
+  incorrect?: number;
+  missing?: number;
+  partial?: number;
+  failed_fields?: string[];
+  // autotune_prompt_updated sub-fields
+  old_length?: number;
+  new_length?: number;
 }
 
 // ── Pipeline types ────────────────────────────────────────────────────────────
