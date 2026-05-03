@@ -100,7 +100,9 @@ async def process_pdfs(
                 else:
                     yield _sse({"type": "step", "step": "pdf_extraction", "filename": filename,
                                  "message": "Extracting text and images from PDF..."})
-                    pdf_data = extract_text_from_pdf(tmp_path)
+                    pdf_data = await asyncio.get_event_loop().run_in_executor(
+                        None, extract_text_from_pdf, tmp_path
+                    )
                     yield _sse({"type": "step_complete", "step": "pdf_extraction", "filename": filename,
                                  "message": f"PDF processed — {pdf_data['page_count']} page(s), "
                                             f"{'scanned' if pdf_data['is_scanned'] else 'text-based'}"})

@@ -13,11 +13,20 @@ a neural net uses backprop — the feedback signal flows back to update
 the "parameter" (prompt) that controls the model's behavior.
 """
 
+import asyncio
+import functools
 import json
 from typing import Callable, Optional
 
 from extractor import extract_fields
 from judge import judge_extraction
+
+
+async def _run_sync(fn, *args):
+    """Run a blocking (sync) function in a thread-pool so the event loop stays free
+    to flush SSE events in real-time while Gemini is thinking."""
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(None, functools.partial(fn, *args))
 
 OPTIMIZER_SYSTEM_PROMPT = """You are an elite prompt engineer specializing in financial document extraction systems. You optimize extraction prompts using principles from automatic prompt optimization research (OPRO/APE).
 
@@ -138,7 +147,7 @@ async def autotune(
         })
 
         try:
-            extracted = extract_fields(client, model_name, pdf_data, current_prompt)
+            extracted = await _run_sync(extract_fields, client, model_name, pdf_data, current_prompt)
         except Exception as e:
             extracted = {}
             await emit({
@@ -165,7 +174,7 @@ async def autotune(
         })
 
         try:
-            judge_result = judge_extraction(client, model_name, pdf_data, extracted)
+            judge_result = await _run_sync(judge_extraction, client, model_name, pdf_data, extracted)
         except Exception as e:
             judge_result = {
                 "overall_accuracy": 0,
@@ -254,7 +263,11 @@ async def autotune(
                 optimizer_input = _build_optimizer_input(
                     current_prompt, extracted, judge_result, iter_num, iterations
                 )
-                response = client.models.generate_content(model=model_name, contents=optimizer_input)
+                loop = asyncio.get_event_loop()
+                response = await loop.run_in_executor(
+                    None,
+                    functools.partial(client.models.generate_content, model=model_name, contents=optimizer_input)
+                )
                 improved = response.text.strip()
                 if improved:
                     current_prompt = improved
