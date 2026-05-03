@@ -6,941 +6,983 @@
   <title>Banking PDF Extractor — Overview</title>
   <style>
     :root {
-      --bg: #020817;
-      --bg2: #0f172a;
-      --bg3: #1e293b;
-      --border: #334155;
-      --indigo: #6366f1;
-      --indigo-light: #818cf8;
-      --indigo-dark: #3730a3;
-      --emerald: #10b981;
-      --amber: #f59e0b;
-      --red: #ef4444;
-      --slate-100: #f1f5f9;
-      --slate-200: #e2e8f0;
-      --slate-300: #cbd5e1;
-      --slate-400: #94a3b8;
-      --slate-500: #64748b;
-      --slate-600: #475569;
+      --bg: #020817; --bg2: #0f172a; --bg3: #1e293b; --bg4: #0d1526;
+      --border: #334155; --border2: #1e2d45;
+      --indigo: #6366f1; --indigo-light: #818cf8; --indigo-dark: #3730a3;
+      --emerald: #10b981; --amber: #f59e0b; --red: #ef4444; --violet: #8b5cf6;
+      --sky: #38bdf8; --orange: #f97316;
+      --slate-100: #f1f5f9; --slate-200: #e2e8f0; --slate-300: #cbd5e1;
+      --slate-400: #94a3b8; --slate-500: #64748b; --slate-600: #475569;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--slate-300);
-      line-height: 1.6;
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--slate-300); line-height: 1.6; }
 
     /* ── HERO ── */
-    .hero {
-      background: linear-gradient(135deg, #0f0c29, #1a1a4e 40%, #0f172a);
-      border-bottom: 1px solid var(--border);
-      padding: 80px 24px 60px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(99,102,241,0.15), transparent);
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(99,102,241,0.15);
-      border: 1px solid rgba(99,102,241,0.4);
-      border-radius: 99px;
-      padding: 6px 16px;
-      font-size: 12px; font-weight: 600; letter-spacing: .05em;
-      color: var(--indigo-light);
-      margin-bottom: 24px;
-    }
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: -0.02em;
-      margin-bottom: 16px;
-    }
+    .hero { background: linear-gradient(135deg, #0f0c29, #1a1a4e 40%, #0f172a); border-bottom: 1px solid var(--border); padding: 80px 24px 64px; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(99,102,241,0.18), transparent); }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.4); border-radius: 99px; padding: 6px 16px; font-size: 12px; font-weight: 600; letter-spacing: .05em; color: var(--indigo-light); margin-bottom: 24px; position: relative; }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; color: #fff; letter-spacing: -0.02em; margin-bottom: 16px; position: relative; }
     .hero h1 span { color: var(--indigo-light); }
-    .hero p {
-      font-size: 1.125rem;
-      color: var(--slate-400);
-      max-width: 600px;
-      margin: 0 auto 32px;
-    }
-    .pill-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-    .pill {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border);
-      border-radius: 99px;
-      padding: 6px 14px;
-      font-size: 13px;
-      color: var(--slate-300);
-    }
+    .hero p { font-size: 1.125rem; color: var(--slate-400); max-width: 620px; margin: 0 auto 32px; position: relative; }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; position: relative; }
+    .pill { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 99px; padding: 6px 14px; font-size: 13px; color: var(--slate-300); }
+    .pill.new { border-color: rgba(99,102,241,0.5); background: rgba(99,102,241,0.1); color: var(--indigo-light); }
 
     /* ── LAYOUT ── */
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
     section { padding: 72px 0; border-bottom: 1px solid var(--border); }
     section:last-child { border-bottom: none; }
-    .section-label {
-      font-size: 11px; font-weight: 700; letter-spacing: .12em;
-      text-transform: uppercase; color: var(--indigo-light);
-      margin-bottom: 12px;
-    }
-    h2 {
-      font-size: clamp(1.5rem, 3vw, 2rem);
-      font-weight: 700; color: #fff;
-      letter-spacing: -.02em; margin-bottom: 16px;
-    }
+    .section-label { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo-light); margin-bottom: 12px; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: #fff; letter-spacing: -.02em; margin-bottom: 16px; }
     .lead { font-size: 1.05rem; color: var(--slate-400); max-width: 720px; margin-bottom: 40px; }
 
     /* ── CARDS ── */
     .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-    .card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px;
-      transition: border-color .2s;
-    }
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: border-color .2s; }
     .card:hover { border-color: var(--indigo); }
-    .card-icon {
-      width: 44px; height: 44px;
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; margin-bottom: 16px;
-    }
+    .card-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 16px; }
     .card h3 { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
     .card p { font-size: .875rem; color: var(--slate-400); }
+    .card .new-badge { display: inline-block; background: rgba(99,102,241,.2); border: 1px solid rgba(99,102,241,.4); color: var(--indigo-light); border-radius: 4px; font-size: 10px; font-weight: 700; padding: 1px 6px; letter-spacing: .04em; margin-bottom: 8px; }
+
+    /* ── SCREENSHOTS ── */
+    .screenshots { display: flex; flex-direction: column; gap: 48px; }
+    .screenshot-item { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+    .screenshot-item.reverse { direction: rtl; }
+    .screenshot-item.reverse > * { direction: ltr; }
+    .screenshot-desc h3 { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 10px; }
+    .screenshot-desc p { font-size: .9rem; color: var(--slate-400); margin-bottom: 14px; }
+    .screenshot-desc ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .screenshot-desc li { font-size: .85rem; color: var(--slate-400); display: flex; align-items: flex-start; gap: 8px; }
+    .screenshot-desc li::before { content: '→'; color: var(--indigo-light); flex-shrink: 0; }
+    .screenshot-frame { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.5); }
+    .screenshot-titlebar { background: var(--bg3); border-bottom: 1px solid var(--border); padding: 10px 16px; display: flex; align-items: center; gap: 8px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; } .dot-y { background: #ffbd2e; } .dot-g { background: #28c840; }
+    .screenshot-body { padding: 16px; }
+
+    /* ── MOCKUP UI ELEMENTS ── */
+    .mock-header { background: var(--bg3); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
+    .mock-logo { width: 32px; height: 32px; background: var(--indigo); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+    .mock-title { font-size: 13px; font-weight: 700; color: #fff; }
+    .mock-subtitle { font-size: 10px; color: var(--slate-500); }
+    .mock-tabs { display: flex; gap: 2px; margin-left: auto; background: var(--bg); border-radius: 8px; padding: 3px; }
+    .mock-tab { font-size: 11px; padding: 4px 10px; border-radius: 5px; color: var(--slate-400); }
+    .mock-tab.active { background: var(--indigo); color: #fff; }
+    .mock-tab .tab-dot { display: inline-block; width: 14px; height: 14px; background: #4f46e5; border-radius: 50%; font-size: 8px; line-height: 14px; text-align: center; margin-left: 4px; }
+
+    /* Upload mockup */
+    .mock-dropzone { border: 2px dashed var(--border); border-radius: 12px; padding: 28px; text-align: center; margin-bottom: 12px; }
+    .mock-dropzone-icon { font-size: 28px; margin-bottom: 8px; }
+    .mock-dropzone p { font-size: 12px; color: var(--slate-400); }
+    .mock-file-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .mock-file { background: var(--bg3); border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; gap: 8px; font-size: 11px; }
+    .mock-file-icon { color: var(--indigo-light); }
+    .mock-btn { border-radius: 10px; padding: 10px; text-align: center; font-size: 12px; font-weight: 700; }
+    .mock-btn.indigo { background: var(--indigo); color: #fff; }
+    .mock-btn.amber { background: #d97706; color: #fff; }
+    .mock-settings { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+    .mock-settings-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .mock-settings-label { font-size: 11px; color: var(--slate-400); font-weight: 600; }
+    .mock-toggle { display: flex; align-items: center; gap: 6px; }
+    .mock-toggle-track { width: 32px; height: 17px; background: var(--amber); border-radius: 9px; position: relative; }
+    .mock-toggle-thumb { width: 13px; height: 13px; background: #fff; border-radius: 50%; position: absolute; right: 2px; top: 2px; }
+    .mock-amber-box { background: rgba(245,158,11,.08); border: 1px solid rgba(245,158,11,.3); border-radius: 8px; padding: 8px 10px; }
+    .mock-amber-title { font-size: 11px; font-weight: 700; color: #fbbf24; display: flex; align-items: center; gap: 6px; }
+    .mock-amber-sub { font-size: 10px; color: #92400e; margin-top: 2px; }
+
+    /* Processing mockup */
+    .mock-event-list { display: flex; flex-direction: column; gap: 4px; }
+    .mock-event { border-radius: 8px; padding: 7px 10px; display: flex; align-items: flex-start; gap: 8px; font-size: 11px; }
+    .mock-event.file-start { background: var(--bg3); border: 1px solid var(--border); font-weight: 700; color: #fff; }
+    .mock-event.step-done { background: rgba(16,185,129,.08); color: #6ee7b7; }
+    .mock-event.step-autotune { background: rgba(99,102,241,.1); border: 1px solid rgba(99,102,241,.25); color: var(--indigo-light); }
+    .mock-event.iter-sub { background: rgba(255,255,255,.03); margin-left: 12px; color: var(--slate-400); }
+    .mock-event.iter-judge { background: rgba(139,92,246,.08); margin-left: 12px; border: 1px solid rgba(139,92,246,.2); color: #c4b5fd; }
+    .mock-event.iter-complete { background: var(--bg3); border: 1px solid var(--border); margin-left: 12px; }
+    .mock-event.iter-opt { background: rgba(99,102,241,.06); margin-left: 12px; border: 1px solid rgba(99,102,241,.15); color: var(--indigo-light); }
+    .mock-event.converged { background: rgba(16,185,129,.08); border: 1px solid rgba(16,185,129,.2); color: #6ee7b7; }
+    .mock-event-icon { flex-shrink: 0; width: 16px; text-align: center; }
+    .mock-acc-bar { height: 4px; border-radius: 2px; margin-top: 4px; }
+    .mock-iter-badge { display: inline-block; background: rgba(99,102,241,.2); border: 1px solid rgba(99,102,241,.4); border-radius: 99px; font-size: 9px; font-weight: 700; padding: 1px 6px; color: var(--indigo-light); margin-right: 4px; }
+    .mock-field-pills { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+    .mock-pill { font-size: 9px; border-radius: 99px; padding: 1px 7px; border: 1px solid; }
+    .mock-pill.g { background: rgba(16,185,129,.15); color: #6ee7b7; border-color: rgba(16,185,129,.3); }
+    .mock-pill.r { background: rgba(239,68,68,.15); color: #fca5a5; border-color: rgba(239,68,68,.3); }
+    .mock-pill.a { background: rgba(245,158,11,.15); color: #fcd34d; border-color: rgba(245,158,11,.3); }
+
+    /* Results mockup */
+    .mock-result-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .mock-result-header { background: rgba(255,255,255,.03); border-bottom: 1px solid var(--border); padding: 12px 14px; display: flex; align-items: center; gap: 12px; }
+    .mock-gauge { width: 52px; height: 52px; border-radius: 50%; border: 4px solid var(--emerald); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--emerald); flex-shrink: 0; }
+    .mock-field-table { width: 100%; font-size: 10px; border-collapse: collapse; }
+    .mock-field-table td { padding: 5px 8px; border-bottom: 1px solid rgba(51,65,85,.4); }
+    .mock-field-table .label { color: var(--slate-500); font-weight: 600; }
+    .mock-field-table .value { color: var(--slate-200); }
+    .mock-field-table .status { }
+    .mock-status-badge { display: inline-block; border-radius: 4px; padding: 1px 5px; font-size: 9px; font-weight: 700; }
+    .mock-status-correct { background: rgba(16,185,129,.15); color: #6ee7b7; }
+    .mock-status-incorrect { background: rgba(239,68,68,.15); color: #fca5a5; }
+    .mock-status-missing { background: rgba(245,158,11,.15); color: #fcd34d; }
+    .mock-prompt-panel { background: rgba(99,102,241,.08); border-top: 1px solid rgba(99,102,241,.2); padding: 10px 14px; }
+    .mock-prompt-title { font-size: 11px; font-weight: 700; color: var(--indigo-light); display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+    .mock-prompt-code { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 8px; font-size: 9px; font-family: monospace; color: var(--slate-400); line-height: 1.5; }
+    .mock-copy-btn { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: var(--indigo-light); border: 1px solid rgba(99,102,241,.3); border-radius: 5px; padding: 2px 8px; margin-top: 6px; cursor: pointer; }
+
+    /* Pipeline mockup */
+    .mock-pipeline-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+    .mock-stat { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 10px; text-align: center; }
+    .mock-stat-label { font-size: 10px; color: var(--slate-500); }
+    .mock-stat-val { font-size: 18px; font-weight: 700; margin-top: 2px; }
+    .mock-table { width: 100%; border-collapse: collapse; font-size: 10px; }
+    .mock-table th { background: rgba(255,255,255,.03); color: var(--slate-500); padding: 7px 8px; text-align: left; font-size: 9px; text-transform: uppercase; letter-spacing: .06em; border-bottom: 1px solid var(--border); }
+    .mock-table td { padding: 8px 8px; border-bottom: 1px solid rgba(51,65,85,.3); color: var(--slate-300); vertical-align: middle; }
+    .mock-run-id { color: var(--indigo-light); font-family: monospace; font-weight: 700; font-size: 10px; }
+    .mock-progress-bar { height: 4px; border-radius: 2px; background: var(--bg3); overflow: hidden; margin-top: 2px; }
+    .mock-progress-fill { height: 4px; border-radius: 2px; }
+    .mock-action-btns { display: flex; gap: 4px; }
+    .mock-action-btn { width: 22px; height: 22px; border-radius: 5px; background: rgba(255,255,255,.05); display: flex; align-items: center; justify-content: center; font-size: 10px; }
+    .mock-status-chip { display: inline-flex; align-items: center; gap: 3px; border-radius: 99px; padding: 2px 8px; font-size: 9px; font-weight: 600; }
+    .mock-status-chip.complete { background: rgba(16,185,129,.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,.25); }
+    .mock-status-chip.running { background: rgba(99,102,241,.12); color: var(--indigo-light); border: 1px solid rgba(99,102,241,.25); }
 
     /* ── HOW IT WORKS STEPS ── */
     .steps { display: flex; flex-direction: column; gap: 0; }
-    .step {
-      display: flex; gap: 24px; position: relative;
-    }
-    .step:not(:last-child)::after {
-      content: '';
-      position: absolute; left: 19px; top: 48px;
-      width: 2px; bottom: 0;
-      background: linear-gradient(to bottom, var(--indigo), transparent);
-    }
-    .step-num {
-      width: 40px; height: 40px; border-radius: 50%; shrink: 0;
-      background: var(--indigo); color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 14px; flex-shrink: 0;
-      position: relative; z-index: 1;
-    }
+    .step { display: flex; gap: 24px; position: relative; }
+    .step:not(:last-child)::after { content: ''; position: absolute; left: 19px; top: 48px; width: 2px; bottom: 0; background: linear-gradient(to bottom, var(--indigo), transparent); }
+    .step-num { width: 40px; height: 40px; border-radius: 50%; background: var(--indigo); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; position: relative; z-index: 1; }
     .step-body { padding: 8px 0 40px; flex: 1; }
     .step-body h3 { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
     .step-body p { font-size: .875rem; color: var(--slate-400); }
-    .step-tag {
-      display: inline-block;
-      background: rgba(99,102,241,.15); border: 1px solid rgba(99,102,241,.3);
-      color: var(--indigo-light); border-radius: 6px;
-      font-size: 11px; font-weight: 600; padding: 2px 8px;
-      margin-top: 8px;
-    }
+    .step-tag { display: inline-block; background: rgba(99,102,241,.15); border: 1px solid rgba(99,102,241,.3); color: var(--indigo-light); border-radius: 6px; font-size: 11px; font-weight: 600; padding: 2px 8px; margin-top: 8px; margin-right: 4px; }
+    .step-tag.new { background: rgba(16,185,129,.12); border-color: rgba(16,185,129,.3); color: #6ee7b7; }
 
     /* ── ARCHITECTURE ── */
-    .arch-diagram {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .arch-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .arch-box {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 20px;
-      text-align: center;
-      flex: 1;
-      min-width: 120px;
-    }
+    .arch-diagram { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 40px; display: flex; flex-direction: column; gap: 16px; }
+    .arch-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .arch-box { background: var(--bg3); border: 1px solid var(--border); border-radius: 12px; padding: 14px 20px; text-align: center; flex: 1; min-width: 120px; }
     .arch-box.highlight { border-color: var(--indigo); background: rgba(99,102,241,.08); }
     .arch-box.gemini { border-color: #4285f4; background: rgba(66,133,244,.08); }
     .arch-box.judge { border-color: var(--amber); background: rgba(245,158,11,.08); }
     .arch-box.opro { border-color: var(--emerald); background: rgba(16,185,129,.08); }
+    .arch-box.pipeline { border-color: var(--violet); background: rgba(139,92,246,.08); }
+    .arch-box.db { border-color: var(--sky); background: rgba(56,189,248,.08); }
     .arch-box-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--slate-500); margin-bottom: 4px; }
     .arch-box-title { font-size: 13px; font-weight: 700; color: #fff; }
     .arch-box-sub { font-size: 11px; color: var(--slate-500); margin-top: 2px; }
-    .arch-arrow {
-      color: var(--slate-600); font-size: 20px; flex-shrink: 0;
-    }
-    .arch-divider {
-      display: flex; align-items: center; gap: 16px;
-      color: var(--slate-600); font-size: 12px;
-    }
-    .arch-divider::before, .arch-divider::after {
-      content: ''; flex: 1; height: 1px; background: var(--border);
-    }
+    .arch-arrow { color: var(--slate-600); font-size: 20px; flex-shrink: 0; }
+    .arch-divider { display: flex; align-items: center; gap: 16px; color: var(--slate-600); font-size: 12px; }
+    .arch-divider::before, .arch-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-    /* ── SEQUENCE FLOW ── */
+    /* ── SEQUENCE ── */
     .seq { overflow-x: auto; }
-    .seq-table {
-      width: 100%; border-collapse: collapse;
-      font-size: 13px; min-width: 700px;
-    }
-    .seq-table th {
-      background: var(--bg3);
-      color: var(--slate-400); font-weight: 600;
-      padding: 12px 16px; text-align: left;
-      border-bottom: 1px solid var(--border);
-      font-size: 11px; text-transform: uppercase; letter-spacing: .08em;
-    }
-    .seq-table td {
-      padding: 12px 16px;
-      border-bottom: 1px solid rgba(51,65,85,.5);
-      vertical-align: top;
-    }
+    .seq-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 700px; }
+    .seq-table th { background: var(--bg3); color: var(--slate-400); font-weight: 600; padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+    .seq-table td { padding: 12px 16px; border-bottom: 1px solid rgba(51,65,85,.5); vertical-align: top; }
     .seq-table tr:hover td { background: rgba(255,255,255,.02); }
-    .seq-num {
-      width: 28px; height: 28px; border-radius: 50%;
-      background: var(--indigo); color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 12px;
-    }
-    .seq-actor {
-      font-weight: 600; color: #fff; font-size: 12px;
-    }
+    .seq-num { width: 28px; height: 28px; border-radius: 50%; background: var(--indigo); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; }
+    .seq-actor { font-weight: 600; color: #fff; font-size: 12px; }
     .seq-arrow { color: var(--slate-500); font-size: 16px; }
-    .badge {
-      display: inline-block; border-radius: 6px;
-      font-size: 11px; font-weight: 600; padding: 2px 8px;
-    }
+    .badge { display: inline-block; border-radius: 6px; font-size: 11px; font-weight: 600; padding: 2px 8px; }
     .badge-blue { background: rgba(66,133,244,.15); color: #60a5fa; border: 1px solid rgba(66,133,244,.3); }
     .badge-amber { background: rgba(245,158,11,.15); color: var(--amber); border: 1px solid rgba(245,158,11,.3); }
     .badge-green { background: rgba(16,185,129,.15); color: var(--emerald); border: 1px solid rgba(16,185,129,.3); }
     .badge-indigo { background: rgba(99,102,241,.15); color: var(--indigo-light); border: 1px solid rgba(99,102,241,.3); }
     .badge-slate { background: rgba(100,116,139,.15); color: var(--slate-400); border: 1px solid rgba(100,116,139,.3); }
+    .badge-violet { background: rgba(139,92,246,.15); color: #c4b5fd; border: 1px solid rgba(139,92,246,.3); }
 
     /* ── TECH STACK ── */
     .tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-    .tech-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      display: flex; gap: 14px; align-items: flex-start;
-    }
+    .tech-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; display: flex; gap: 14px; align-items: flex-start; }
     .tech-icon { font-size: 28px; flex-shrink: 0; }
     .tech-name { font-size: .9rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
     .tech-desc { font-size: .78rem; color: var(--slate-500); }
-    .tech-role {
-      font-size: 10px; font-weight: 600; text-transform: uppercase;
-      letter-spacing: .06em; color: var(--indigo-light); margin-bottom: 4px;
-    }
+    .tech-role { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--indigo-light); margin-bottom: 4px; }
 
-    /* ── FIELDS TABLE ── */
+    /* ── FIELDS ── */
     .fields-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
-    .field-item {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 16px;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .field-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--indigo); flex-shrink: 0; }
+    .field-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
+    .field-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
     .field-name { font-size: .85rem; font-weight: 600; color: var(--slate-200); }
     .field-desc { font-size: .75rem; color: var(--slate-500); }
 
-    /* ── OPRO EXPLAINER ── */
-    .opro-flow {
-      display: flex; align-items: center; flex-wrap: wrap; gap: 0;
-      background: var(--bg2); border: 1px solid var(--border);
-      border-radius: 16px; overflow: hidden;
-    }
-    .opro-step {
-      flex: 1; min-width: 140px; padding: 24px 20px; text-align: center;
-      position: relative;
-    }
-    .opro-step:not(:last-child)::after {
-      content: '→';
-      position: absolute; right: -10px; top: 50%;
-      transform: translateY(-50%);
-      color: var(--slate-600); font-size: 20px; z-index: 1;
-    }
+    /* ── OPRO FLOW ── */
+    .opro-flow { display: flex; align-items: stretch; flex-wrap: wrap; background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+    .opro-step { flex: 1; min-width: 140px; padding: 24px 20px; text-align: center; position: relative; border-right: 1px solid var(--border); }
+    .opro-step:last-child { border-right: none; }
     .opro-step-icon { font-size: 28px; margin-bottom: 10px; }
     .opro-step-title { font-size: .85rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
     .opro-step-sub { font-size: .75rem; color: var(--slate-500); }
-    .opro-loop {
-      text-align: center; padding: 12px;
-      background: rgba(99,102,241,.06);
-      border-top: 1px solid rgba(99,102,241,.2);
-      font-size: 12px; color: var(--indigo-light); font-weight: 600;
-    }
+    .opro-loop { text-align: center; padding: 12px; background: rgba(99,102,241,.06); border-top: 1px solid rgba(99,102,241,.2); font-size: 12px; color: var(--indigo-light); font-weight: 600; }
+
+    /* ── CLAUDE CODE SECTION ── */
+    .cc-hero { background: linear-gradient(135deg, rgba(139,92,246,.1), rgba(99,102,241,.08)); border: 1px solid rgba(139,92,246,.3); border-radius: 20px; padding: 40px; margin-bottom: 40px; display: flex; gap: 32px; align-items: flex-start; }
+    .cc-logo { width: 72px; height: 72px; border-radius: 20px; background: linear-gradient(135deg, #7c3aed, #4f46e5); display: flex; align-items: center; justify-content: center; font-size: 36px; flex-shrink: 0; box-shadow: 0 8px 32px rgba(124,58,237,.4); }
+    .cc-headline h3 { font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 8px; }
+    .cc-headline p { font-size: .95rem; color: var(--slate-400); }
+    .token-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 40px; }
+    .token-stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+    .token-stat-val { font-size: 2rem; font-weight: 800; margin-bottom: 4px; }
+    .token-stat-label { font-size: .8rem; color: var(--slate-500); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+    .token-stat-sub { font-size: .75rem; color: var(--slate-600); margin-top: 4px; }
+    .prompt-chain { display: flex; flex-direction: column; gap: 0; }
+    .prompt-item { display: flex; gap: 20px; position: relative; }
+    .prompt-item:not(:last-child)::after { content: ''; position: absolute; left: 17px; top: 40px; width: 2px; bottom: 0; background: linear-gradient(to bottom, rgba(139,92,246,.5), transparent); }
+    .prompt-num { width: 36px; height: 36px; border-radius: 50%; background: rgba(139,92,246,.2); border: 1px solid rgba(139,92,246,.4); color: #c4b5fd; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0; position: relative; z-index: 1; }
+    .prompt-body { padding: 6px 0 32px; flex: 1; }
+    .prompt-quote { background: var(--bg2); border-left: 3px solid var(--violet); border-radius: 0 8px 8px 0; padding: 10px 14px; font-size: .82rem; color: var(--slate-300); font-style: italic; margin-bottom: 8px; }
+    .prompt-result { font-size: .8rem; color: var(--slate-500); }
+    .prompt-result strong { color: var(--slate-300); font-style: normal; }
+    .prompt-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .prompt-tag { font-size: 10px; background: rgba(99,102,241,.1); border: 1px solid rgba(99,102,241,.25); color: var(--indigo-light); border-radius: 4px; padding: 1px 7px; }
+    .prompt-tag.fix { background: rgba(239,68,68,.1); border-color: rgba(239,68,68,.25); color: #fca5a5; }
+    .prompt-tag.new { background: rgba(16,185,129,.1); border-color: rgba(16,185,129,.25); color: #6ee7b7; }
 
     /* ── NEXT STEPS ── */
     .next-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-    .next-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-    }
-    .next-card-header {
-      display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
-    }
-    .next-card-icon {
-      width: 40px; height: 40px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-    }
+    .next-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+    .next-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .next-card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
     .next-card h3 { font-size: .95rem; font-weight: 700; color: #fff; }
     .next-card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-    .next-card li {
-      display: flex; align-items: flex-start; gap: 8px;
-      font-size: .85rem; color: var(--slate-400);
-    }
+    .next-card li { display: flex; align-items: flex-start; gap: 8px; font-size: .85rem; color: var(--slate-400); }
     .next-card li::before { content: '→'; color: var(--indigo-light); flex-shrink: 0; }
 
     /* ── FOOTER ── */
-    footer {
-      background: var(--bg2);
-      border-top: 1px solid var(--border);
-      padding: 32px 24px;
-      text-align: center;
-      font-size: .85rem;
-      color: var(--slate-500);
-    }
+    footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 32px 24px; text-align: center; font-size: .85rem; color: var(--slate-500); }
     footer strong { color: var(--slate-300); }
+    footer a { color: var(--indigo-light); text-decoration: none; }
 
-    @media (max-width: 640px) {
-      .opro-step:not(:last-child)::after { display: none; }
+    @media (max-width: 768px) {
+      .screenshot-item { grid-template-columns: 1fr; }
+      .screenshot-item.reverse { direction: ltr; }
+      .cc-hero { flex-direction: column; }
+      .opro-step:not(:last-child) { border-right: none; border-bottom: 1px solid var(--border); }
       .arch-row { flex-direction: column; }
-      .arch-arrow { transform: rotate(90deg); }
     }
   </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════════════════
-     HERO
-══════════════════════════════════════════════════════════ -->
+<!-- ══ HERO ════════════════════════════════════════════════════ -->
 <div class="hero">
   <div class="hero-badge">🏦 Banking AI · Document Intelligence</div>
   <h1>Banking PDF <span>Extractor</span></h1>
-  <p>Intelligent extraction of structured financial data from unstructured banking documents — powered by Gemini, validated by an LLM-as-Judge, and auto-optimised using OPRO prompt tuning.</p>
+  <p>Intelligent extraction of structured financial data from unstructured banking documents — powered by Gemini, validated by an LLM-as-Judge, and auto-optimised using OPRO iterative prompt tuning.</p>
   <div class="pill-row">
-    <span class="pill">🤖 Gemini 2.5 Flash</span>
+    <span class="pill">🤖 Gemini Flash</span>
     <span class="pill">⚖️ LLM-as-Judge</span>
     <span class="pill">🔄 OPRO Auto-tune</span>
-    <span class="pill">📡 SSE Streaming</span>
+    <span class="pill">📡 Real-time SSE</span>
     <span class="pill">⚡ FastAPI + React</span>
+    <span class="pill new">🗂️ Batch Pipeline</span>
+    <span class="pill new">📊 Excel Export</span>
+    <span class="pill new">🧪 Mock Dev Mode</span>
   </div>
 </div>
 
 <div class="container">
 
-<!-- ══════════════════════════════════════════════════════════
-     OVERVIEW
-══════════════════════════════════════════════════════════ -->
+<!-- ══ OVERVIEW ════════════════════════════════════════════════ -->
 <section>
   <div class="section-label">Overview</div>
   <h2>What does it do?</h2>
-  <p class="lead">Banks receive thousands of unstructured PDF documents from customers — credit memos, loan agreements, facility letters, bank guarantees. Manually extracting key fields is slow, error-prone, and expensive. This application automates that extraction with high accuracy.</p>
+  <p class="lead">Banks receive thousands of unstructured PDF documents — credit memos, loan agreements, facility letters, bank guarantees. Manually extracting key fields is slow, error-prone, and expensive. This application automates extraction with self-improving accuracy.</p>
 
   <div class="cards">
     <div class="card">
       <div class="card-icon" style="background:rgba(66,133,244,.15);">📄</div>
       <h3>Multi-format PDF Support</h3>
-      <p>Handles both native text-based PDFs and scanned/image-based documents using Gemini's vision capabilities automatically.</p>
+      <p>Handles both native text-based PDFs and scanned/image-based documents using Gemini's vision capabilities — auto-detected per page.</p>
     </div>
     <div class="card">
       <div class="card-icon" style="background:rgba(99,102,241,.15);">🎯</div>
       <h3>14 Financial Fields</h3>
-      <p>Extracts loan amount, beneficiary name, account number, bank name, interest rate, collateral, guarantor, and more — all in one pass.</p>
+      <p>Extracts loan amount, beneficiary name, account number, interest rate, collateral, guarantor, and more — all from a single document pass.</p>
     </div>
     <div class="card">
       <div class="card-icon" style="background:rgba(245,158,11,.15);">⚖️</div>
-      <h3>Accuracy Validation</h3>
-      <p>A second Gemini instance acts as an independent auditor, scoring each extracted field as correct, incorrect, missing, or partial.</p>
+      <h3>LLM-as-Judge Validation</h3>
+      <p>A second Gemini instance acts as an independent auditor, scoring each extracted field as correct, incorrect, missing, or partial with reasoning.</p>
     </div>
     <div class="card">
       <div class="card-icon" style="background:rgba(16,185,129,.15);">🔄</div>
-      <h3>Self-improving Prompts</h3>
-      <p>If accuracy falls short, the system automatically rewrites its own extraction prompt using judge feedback — running up to 3 iterations.</p>
+      <h3>OPRO Self-improving Prompts</h3>
+      <p>Judge feedback drives 3 iterations of prompt rewriting. The optimizer targets specific failing fields — the best-scoring result is kept.</p>
     </div>
     <div class="card">
-      <div class="card-icon" style="background:rgba(239,68,68,.15);">📡</div>
-      <h3>Real-time Progress</h3>
-      <p>Every processing step streams to the UI in real time via Server-Sent Events — no polling, no page refresh.</p>
+      <div class="card-icon" style="background:rgba(56,189,248,.15);">📡</div>
+      <div class="new-badge">NEW</div>
+      <h3>Granular Real-time Events</h3>
+      <p>Every sub-step inside each iteration streams live — extraction → judge score with field pills → optimizer → prompt diff.</p>
     </div>
     <div class="card">
-      <div class="card-icon" style="background:rgba(168,85,247,.15);">📦</div>
-      <h3>Batch Processing</h3>
-      <p>Upload multiple PDFs in one shot. Each document is processed sequentially with its own extraction, judgment, and optimisation cycle.</p>
+      <div class="card-icon" style="background:rgba(139,92,246,.15);">🗂️</div>
+      <div class="new-badge">NEW</div>
+      <h3>Batch Pipeline + Dashboard</h3>
+      <p>Point to a folder of PDFs. Run with a pre-tuned JSON prompt for fast single-pass mode. Monitor runs, export to Excel with 4-sheet workbook.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:rgba(245,158,11,.15);">🪄</div>
+      <div class="new-badge">NEW</div>
+      <h3>Tuned Prompt Export</h3>
+      <p>After any run, copy the best-performing optimised prompt as a ready-to-paste JSON block for reuse in future pipeline runs.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background:rgba(245,158,11,.15);">🧪</div>
+      <div class="new-badge">NEW</div>
+      <h3>Developer Mock Mode</h3>
+      <p>Toggle mock mode to test the full UI pipeline without any LLM calls. Simulates 62% → 78% → 91% accuracy across 3 iterations.</p>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════════
-     HOW IT WORKS
-══════════════════════════════════════════════════════════ -->
+<!-- ══ SCREENSHOTS ══════════════════════════════════════════════ -->
+<section>
+  <div class="section-label">Screenshots</div>
+  <h2>Application walkthrough</h2>
+  <p class="lead">Key screens from the application — from upload through real-time processing to results and batch pipeline.</p>
+
+  <div class="screenshots">
+
+    <!-- 1: Upload with mock mode -->
+    <div class="screenshot-item">
+      <div class="screenshot-desc">
+        <h3>1 — Upload &amp; Configuration</h3>
+        <p>Drag-and-drop PDF upload with configurable accuracy threshold and iteration count. Developer Mock Mode lets you test the full pipeline without a real PDF or LLM calls.</p>
+        <ul>
+          <li>Drag-and-drop or browse for PDFs</li>
+          <li>Accuracy target and iteration count controls</li>
+          <li>Custom prompt override for power users</li>
+          <li>🧪 Mock Mode toggle — amber UI, no LLM needed</li>
+        </ul>
+      </div>
+      <div class="screenshot-frame">
+        <div class="screenshot-titlebar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span style="margin-left:8px;font-size:11px;color:var(--slate-500)">localhost:5175</span></div>
+        <div class="mock-header">
+          <div class="mock-logo">🏦</div>
+          <div><div class="mock-title">Banking PDF Extractor</div><div class="mock-subtitle">Gemini · LLM-as-Judge · OPRO Auto-tune</div></div>
+          <div class="mock-tabs">
+            <div class="mock-tab active">⬆ Upload</div>
+            <div class="mock-tab">⚡ Processing</div>
+            <div class="mock-tab">🏦 Results</div>
+            <div class="mock-tab">⊞ Pipeline</div>
+          </div>
+        </div>
+        <div class="screenshot-body">
+          <div class="mock-dropzone" style="border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.04)">
+            <div class="mock-dropzone-icon">🧪</div>
+            <p style="color:#fbbf24;font-weight:600">Mock mode active</p>
+            <p style="font-size:10px;color:#92400e;margin-top:4px">No real PDF needed — uses synthetic data to test pipeline</p>
+          </div>
+          <div class="mock-settings">
+            <div class="mock-settings-row">
+              <div class="mock-settings-label">⚙ Extraction settings</div>
+              <span style="font-size:10px;color:var(--slate-500)">▲</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+              <div><div style="font-size:10px;color:var(--slate-500);margin-bottom:4px">Accuracy target (%)</div><div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:11px;color:#fff">85</div></div>
+              <div><div style="font-size:10px;color:var(--slate-500);margin-bottom:4px">Max iterations</div><div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:5px 8px;font-size:11px;color:#fff">3</div></div>
+            </div>
+            <div class="mock-amber-box">
+              <div class="mock-amber-title">🧪 Developer: Mock Mode
+                <span style="margin-left:auto"><div class="mock-toggle"><div class="mock-toggle-track"><div class="mock-toggle-thumb"></div></div></div></span>
+              </div>
+              <div class="mock-amber-sub">Skips LLM calls — uses synthetic data to test UI & pipeline flow</div>
+              <div style="margin-top:6px;font-size:10px;color:rgba(245,158,11,.7)">✓ ON — simulates 3 iterations: 62% → 78% → 91%</div>
+            </div>
+          </div>
+          <div class="mock-btn amber">🧪 Run Mock Test (3 iterations)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2: Processing with granular events -->
+    <div class="screenshot-item reverse">
+      <div class="screenshot-desc">
+        <h3>2 — Real-time Processing Pipeline</h3>
+        <p>Every sub-step inside each OPRO iteration streams live. No more waiting — you see exactly which phase Gemini is in as it happens.</p>
+        <ul>
+          <li>ITER 1/3 badge on every sub-step message</li>
+          <li>🔍 Extracting → ⚖️ Judging → 🔄 Optimizing</li>
+          <li>Field score pills: ✓ correct  ✗ wrong  ∅ missing</li>
+          <li>Prompt length delta on each optimizer update</li>
+          <li>Accuracy bar after each iteration completes</li>
+        </ul>
+      </div>
+      <div class="screenshot-frame">
+        <div class="screenshot-titlebar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span style="margin-left:8px;font-size:11px;color:var(--slate-500)">Processing Pipeline</span><span style="margin-left:auto;font-size:10px;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);color:var(--indigo-light);padding:2px 8px;border-radius:99px">● Live</span></div>
+        <div class="screenshot-body">
+          <div class="mock-event-list">
+            <div class="mock-event file-start"><div class="mock-event-icon">⚡</div><b>Processing loan_agreement.pdf (1/1)…</b></div>
+            <div class="mock-event step-done"><div class="mock-event-icon">✓</div>PDF processed — 4 page(s), text-based</div>
+            <div class="mock-event step-autotune"><div class="mock-event-icon">◎</div>Starting OPRO auto-tune — 3 iteration(s)…</div>
+            <div class="mock-event iter-sub"><div class="mock-event-icon">🔍</div><span class="mock-iter-badge">ITER 1/3</span>[1/3] Calling Gemini → extracting 14 fields…</div>
+            <div class="mock-event iter-sub"><div class="mock-event-icon">✓</div><span class="mock-iter-badge">ITER 1/3</span>[1/3] Extraction complete — 14 fields returned</div>
+            <div class="mock-event iter-sub" style="color:#c4b5fd"><div class="mock-event-icon">⚖</div><span class="mock-iter-badge">ITER 1/3</span>[1/3] LLM Judge evaluating field accuracy…</div>
+            <div class="mock-event iter-judge">
+              <div class="mock-event-icon">⚖</div>
+              <div><span class="mock-iter-badge">ITER 1/3</span>[1/3] Judge: 62% — ✓8 correct ✗3 wrong ∅2 missing ~1 partial
+                <div class="mock-field-pills">
+                  <span class="mock-pill g">✓ 8 correct</span>
+                  <span class="mock-pill r">✗ 3 wrong</span>
+                  <span class="mock-pill a">∅ 2 missing</span>
+                  <div style="width:100%;font-size:9px;color:var(--slate-500);margin-top:2px">Needs fix: <code style="background:var(--bg);padding:1px 4px;border-radius:3px">document_date</code> <code style="background:var(--bg);padding:1px 4px;border-radius:3px">credit_limit</code> <code style="background:var(--bg);padding:1px 4px;border-radius:3px">guarantor_name</code></div>
+                </div>
+              </div>
+            </div>
+            <div class="mock-event iter-complete">
+              <div class="mock-event-icon">📈</div>
+              <div><span class="mock-iter-badge">ITER 1/3</span>Iteration 1/3 complete — accuracy: 62% (target: 85%)
+                <div class="mock-acc-bar" style="background:var(--bg3)"><div class="mock-acc-bar" style="background:#ef4444;width:62%"></div></div>
+              </div>
+            </div>
+            <div class="mock-event iter-opt"><div class="mock-event-icon">🔄</div><span class="mock-iter-badge">ITER 1/3</span>[1/3] Optimizer LLM rewriting prompt (fixing: document_date, credit_limit…)</div>
+            <div class="mock-event iter-opt"><div class="mock-event-icon">✎</div><span class="mock-iter-badge">ITER 1/3</span>[1/3] Prompt updated (842 → 1104 chars, +262)</div>
+            <div class="mock-event iter-sub" style="opacity:.6;font-size:10px"><div class="mock-event-icon">⟳</div>ITER 2/3 running…  <span style="color:var(--amber)">78%</span> → ITER 3/3 → <span style="color:var(--emerald)">91% ✓ target reached</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3: Results with tuned prompt -->
+    <div class="screenshot-item">
+      <div class="screenshot-desc">
+        <h3>3 — Extraction Results &amp; Tuned Prompt</h3>
+        <p>Results show the final best extraction with judge scores per field, an accuracy gauge, and the full OPRO trajectory chart. The tuned prompt is ready to copy at the bottom.</p>
+        <ul>
+          <li>91% accuracy gauge with colour coding</li>
+          <li>Per-field status: correct / incorrect / missing / partial</li>
+          <li>OPRO bar chart showing 62% → 78% → 91% trajectory</li>
+          <li>🪄 Tuned Prompt panel with "Copy JSON" for pipeline reuse</li>
+        </ul>
+      </div>
+      <div class="screenshot-frame">
+        <div class="screenshot-titlebar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span style="margin-left:8px;font-size:11px;color:var(--slate-500)">Extraction Results — 1 document</span></div>
+        <div class="screenshot-body">
+          <div class="mock-result-card">
+            <div class="mock-result-header">
+              <div style="flex:1"><div style="font-weight:700;color:#fff;font-size:13px">loan_agreement_unstructured.pdf</div><div style="font-size:10px;color:var(--slate-500);margin-top:2px">4 pages · text-based</div></div>
+              <div style="text-align:center;margin-right:12px"><div style="font-size:10px;color:var(--slate-500)">Initial</div><div style="font-size:13px;font-weight:700;color:var(--slate-400)">62%</div></div>
+              <div class="mock-gauge">91%</div>
+              <div style="background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.25);border-radius:8px;padding:6px 10px;text-align:center;margin-left:10px"><div style="font-size:11px;font-weight:700;color:var(--emerald)">+29%</div><div style="font-size:9px;color:rgba(16,185,129,.5)">improved</div></div>
+            </div>
+            <table class="mock-field-table">
+              <tr><td class="label">Loan Amount</td><td class="value">USD 2,500,000</td><td><span class="mock-status-badge mock-status-correct">correct</span></td></tr>
+              <tr><td class="label">Beneficiary</td><td class="value">Acme Manufacturing Ltd.</td><td><span class="mock-status-badge mock-status-correct">correct</span></td></tr>
+              <tr><td class="label">Document Date</td><td class="value">2024-03-15</td><td><span class="mock-status-badge mock-status-correct">correct</span></td></tr>
+              <tr><td class="label">Interest Rate</td><td class="value">7.25% per annum</td><td><span class="mock-status-badge mock-status-correct">correct</span></td></tr>
+              <tr><td class="label">Collateral</td><td class="value">Factory building, LT-44521</td><td><span class="mock-status-badge mock-status-correct">correct</span></td></tr>
+            </table>
+            <!-- OPRO chart mini -->
+            <div style="padding:10px 14px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+              <div style="font-size:10px;font-weight:700;color:var(--slate-300);margin-bottom:8px;display:flex;align-items:center;gap:6px">📈 OPRO Trajectory (3 iterations)</div>
+              <div style="display:flex;align-items:flex-end;gap:8px;height:36px">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1"><div style="font-size:9px;color:var(--slate-500)">62%</div><div style="width:100%;background:#ef4444;border-radius:3px 3px 0 0;height:22px"></div><div style="font-size:9px;color:var(--slate-600)">#1</div></div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1"><div style="font-size:9px;color:var(--slate-500)">78%</div><div style="width:100%;background:#f59e0b;border-radius:3px 3px 0 0;height:28px"></div><div style="font-size:9px;color:var(--slate-600)">#2</div></div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:2px;flex:1"><div style="font-size:9px;color:var(--emerald)">91%</div><div style="width:100%;background:#10b981;border-radius:3px 3px 0 0;height:33px;box-shadow:0 0 8px rgba(16,185,129,.4)"></div><div style="font-size:9px;color:var(--slate-600)">#3</div></div>
+              </div>
+            </div>
+            <div class="mock-prompt-panel">
+              <div class="mock-prompt-title">🪄 Tuned Prompt — ready to reuse <span style="margin-left:auto;font-size:10px;color:var(--slate-500)">accuracy: 91%  ▼</span></div>
+              <div class="mock-prompt-code">{
+  "extraction_prompt": "You are an expert banking analyst...",
+  "auto_tune": false,
+  "accuracy_threshold": 85,
+  "max_iterations": 1
+}</div>
+              <div style="display:flex;gap:8px;margin-top:6px">
+                <div class="mock-copy-btn">📋 Copy JSON</div>
+                <div class="mock-copy-btn">📋 Copy Prompt</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4: Pipeline dashboard -->
+    <div class="screenshot-item reverse">
+      <div class="screenshot-desc">
+        <h3>4 — Batch Pipeline Dashboard</h3>
+        <p>Run extraction on entire folders of PDFs. Use a pre-tuned prompt for single-pass speed or enable auto-tune per file. Monitor all runs and export to Excel.</p>
+        <ul>
+          <li>Total / Active / Avg Accuracy summary cards</li>
+          <li>Per-run: progress bar, accuracy %, status badge</li>
+          <li>View / Export Excel / Delete actions per run</li>
+          <li>JSON settings editor with auto_tune toggle</li>
+          <li>4-sheet Excel: Summary, Extractions, Field Accuracy, Autotune Trajectory</li>
+        </ul>
+      </div>
+      <div class="screenshot-frame">
+        <div class="screenshot-titlebar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span style="margin-left:8px;font-size:11px;color:var(--slate-500)">Pipeline Dashboard</span></div>
+        <div class="screenshot-body">
+          <div class="mock-pipeline-stats">
+            <div class="mock-stat"><div class="mock-stat-label">Total Runs</div><div class="mock-stat-val" style="color:#fff">4</div></div>
+            <div class="mock-stat"><div class="mock-stat-label">Active</div><div class="mock-stat-val" style="color:var(--indigo-light)">1</div></div>
+            <div class="mock-stat"><div class="mock-stat-label">Avg Accuracy</div><div class="mock-stat-val" style="color:var(--emerald)">87.2%</div></div>
+          </div>
+          <table class="mock-table">
+            <thead><tr><th>Run ID</th><th>Source</th><th>Files</th><th>Progress</th><th>Accuracy</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><span class="mock-run-id">A3F9C2</span></td>
+                <td style="color:var(--slate-400);font-size:10px">credit-memos-q1</td>
+                <td style="text-align:center">12</td>
+                <td><div class="mock-progress-bar" style="width:70px"><div class="mock-progress-fill" style="width:100%;background:var(--emerald)"></div></div><span style="font-size:9px;color:var(--slate-500)">12/12</span></td>
+                <td><span style="font-weight:700;color:var(--emerald)">91.4%</span></td>
+                <td><span class="mock-status-chip complete">✓ complete</span></td>
+                <td><div class="mock-action-btns"><div class="mock-action-btn">👁</div><div class="mock-action-btn" style="color:var(--emerald)">⬇</div><div class="mock-action-btn" style="color:#f87171">🗑</div></div></td>
+              </tr>
+              <tr>
+                <td><span class="mock-run-id">B21AAE</span></td>
+                <td style="color:var(--slate-400);font-size:10px">loan-agreements</td>
+                <td style="text-align:center">8</td>
+                <td><div class="mock-progress-bar" style="width:70px"><div class="mock-progress-fill" style="width:50%;background:var(--indigo)"></div></div><span style="font-size:9px;color:var(--slate-500)">4/8</span></td>
+                <td><span style="font-weight:700;color:var(--amber)">78.0%</span></td>
+                <td><span class="mock-status-chip running">⟳ running</span></td>
+                <td><div class="mock-action-btns"><div class="mock-action-btn">👁</div><div class="mock-action-btn" style="opacity:.3">⬇</div><div class="mock-action-btn" style="color:#f87171">🗑</div></div></td>
+              </tr>
+              <tr>
+                <td><span class="mock-run-id">C77EF1</span></td>
+                <td style="color:var(--slate-400);font-size:10px">facility-letters</td>
+                <td style="text-align:center">5</td>
+                <td><div class="mock-progress-bar" style="width:70px"><div class="mock-progress-fill" style="width:100%;background:var(--emerald)"></div></div><span style="font-size:9px;color:var(--slate-500)">5/5</span></td>
+                <td><span style="font-weight:700;color:var(--emerald)">88.6%</span></td>
+                <td><span class="mock-status-chip complete">✓ complete</span></td>
+                <td><div class="mock-action-btns"><div class="mock-action-btn">👁</div><div class="mock-action-btn" style="color:var(--emerald)">⬇</div><div class="mock-action-btn" style="color:#f87171">🗑</div></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ═════════════════════════════════════════════ -->
 <section>
   <div class="section-label">How It Works</div>
   <h2>Step-by-step pipeline</h2>
-  <p class="lead">Each uploaded PDF flows through a four-stage pipeline. The first three stages always run. Stage 4 runs for every iteration regardless of accuracy — always completing all 3 passes to find the best possible extraction.</p>
+  <p class="lead">Each uploaded PDF flows through a four-stage pipeline. The OPRO loop always runs all iterations — never early-stops — to find the absolute best prompt and extraction.</p>
 
   <div class="steps">
     <div class="step">
       <div class="step-num">1</div>
       <div class="step-body">
-        <h3>PDF Parsing</h3>
-        <p>PyMuPDF extracts the full text content from each page. If the document is scanned or has fewer than 80 characters per page (image-based), all pages are converted to high-resolution PNG images instead. This dual-mode approach ensures both native and scanned documents are handled correctly.</p>
-        <span class="step-tag">PyMuPDF · PIL · Text + Vision fallback</span>
+        <h3>PDF Parsing — thread-pooled</h3>
+        <p>PyMuPDF extracts full text from each page. If the document has fewer than 80 characters per page (scanned), pages are converted to PNG images. The parsing runs in a thread-pool executor so the event loop stays free to flush SSE events in parallel.</p>
+        <span class="step-tag">PyMuPDF · PIL · Text + Vision auto-detect</span>
+        <span class="step-tag new">run_in_executor — non-blocking</span>
       </div>
     </div>
     <div class="step">
       <div class="step-num">2</div>
       <div class="step-body">
         <h3>Field Extraction — Gemini (Extractor)</h3>
-        <p>The document content (text or images) is sent to Gemini 2.5 Flash with a carefully engineered prompt instructing it to extract 14 structured financial fields. The model returns a strict JSON object with exact values as they appear in the document — no paraphrasing or normalisation.</p>
-        <span class="step-tag">Gemini 2.5 Flash · Structured JSON output</span>
+        <p>The document (text or images) is sent to Gemini with an extraction prompt. The model returns a strict JSON with 14 financial fields. The call runs in a thread executor — the moment it completes, an SSE event fires to the browser showing field count.</p>
+        <span class="step-tag">Gemini · Structured JSON · Vision fallback</span>
+        <span class="step-tag new">Real-time: "✓ 14 fields returned" event</span>
       </div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
       <div class="step-body">
         <h3>Accuracy Evaluation — Gemini (Judge)</h3>
-        <p>A second call to Gemini acts as an independent senior banking auditor. It reads the original document and the extracted fields simultaneously, scoring each field as <strong>correct</strong>, <strong>incorrect</strong>, <strong>missing</strong>, <strong>partial</strong>, or <strong>acceptable</strong> (null because it's genuinely absent). It returns an overall accuracy score (0–100) plus specific improvement suggestions.</p>
-        <span class="step-tag">LLM-as-Judge · Field-level scoring · Improvement feedback</span>
+        <p>A second Gemini call reads the document and extracted fields, scoring each as <strong>correct / incorrect / missing / partial / acceptable</strong>. The accuracy % and field-level breakdown stream immediately to the UI with colour-coded pills.</p>
+        <span class="step-tag">LLM-as-Judge · 0–100 score · Field feedback</span>
+        <span class="step-tag new">Live field pills: ✓N correct ✗N wrong ∅N missing</span>
       </div>
     </div>
     <div class="step">
       <div class="step-num">4</div>
       <div class="step-body">
         <h3>OPRO Prompt Optimisation — Gemini (Optimizer)</h3>
-        <p>After each iteration, the judge's feedback is fed to a third Gemini call that acts as a prompt engineer. It reads the current prompt, the failed fields, and the judge's suggestions, then rewrites the extraction prompt to fix those specific issues. This repeats for 3 iterations, always keeping the best-scoring result. The loop is inspired by <strong>OPRO</strong> (Optimization by PROmpting) — treating the prompt as a parameter optimised by gradient-like feedback from the judge.</p>
-        <span class="step-tag">OPRO · Iterative prompt optimisation · 3 iterations · Best-of-N selection</span>
+        <p>Judge feedback feeds a third Gemini call that rewrites the extraction prompt targeting specific failures. After 3 iterations the best-scoring result is kept. The final tuned prompt is saved and exportable — paste it into the Pipeline JSON settings for fast single-pass future runs (<code>auto_tune: false</code>).</p>
+        <span class="step-tag">OPRO · Best-of-3 · Prompt delta shown</span>
+        <span class="step-tag new">Final prompt export — ready-to-reuse JSON</span>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <h3>Batch Pipeline — SQLite + Excel Export <span style="font-size:10px;background:rgba(16,185,129,.15);color:#6ee7b7;border:1px solid rgba(16,185,129,.3);border-radius:4px;padding:2px 7px;margin-left:8px">NEW</span></h3>
+        <p>Upload a folder of PDFs through the Pipeline tab. Configure auto-tune or paste a pre-tuned prompt as JSON. Results persist in SQLite across restarts. Export a 4-sheet Excel workbook: Summary, Extractions, Field Accuracy heatmap, and OPRO Trajectory.</p>
+        <span class="step-tag">SQLite · asyncio.create_task · SSE fan-out</span>
+        <span class="step-tag new">openpyxl · 4-sheet export · Dashboard</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════════
-     OPRO EXPLAINER
-══════════════════════════════════════════════════════════ -->
+<!-- ══ OPRO ════════════════════════════════════════════════════ -->
 <section>
   <div class="section-label">OPRO Auto-tune</div>
   <h2>How prompt optimisation works</h2>
-  <p class="lead">Inspired by "Large Language Models as Optimizers" (Yang et al., 2023) and Andrej Karpathy's framing of LLM-driven self-improvement. The extraction prompt is the "parameter" — the judge's score is the "loss" — the optimizer LLM is the "gradient step".</p>
+  <p class="lead">Inspired by "Large Language Models as Optimizers" (Yang et al., 2023). The extraction prompt is the <em>parameter</em> — the judge's score is the <em>loss</em> — the optimizer LLM is the <em>gradient step</em>. All blocking Gemini calls run in thread executors so each sub-step event reaches the browser the moment it fires.</p>
 
   <div class="opro-flow">
-    <div class="opro-step">
-      <div class="opro-step-icon">📝</div>
-      <div class="opro-step-title">Initial Prompt</div>
-      <div class="opro-step-sub">Default expert banking extraction prompt</div>
-    </div>
-    <div class="opro-step">
-      <div class="opro-step-icon">🤖</div>
-      <div class="opro-step-title">Extract</div>
-      <div class="opro-step-sub">Gemini extracts 14 fields as JSON</div>
-    </div>
-    <div class="opro-step">
-      <div class="opro-step-icon">⚖️</div>
-      <div class="opro-step-title">Judge</div>
-      <div class="opro-step-sub">Scores each field, identifies failures</div>
-    </div>
-    <div class="opro-step">
-      <div class="opro-step-icon">🔧</div>
-      <div class="opro-step-title">Optimize</div>
-      <div class="opro-step-sub">Rewrite prompt targeting specific failures</div>
-    </div>
-    <div class="opro-step">
-      <div class="opro-step-icon">🏆</div>
-      <div class="opro-step-title">Best Result</div>
-      <div class="opro-step-sub">Highest accuracy across all iterations wins</div>
-    </div>
+    <div class="opro-step"><div class="opro-step-icon">📝</div><div class="opro-step-title">Initial Prompt</div><div class="opro-step-sub">Default expert banking extraction prompt</div></div>
+    <div class="opro-step"><div class="opro-step-icon">🔍</div><div class="opro-step-title">Extract</div><div class="opro-step-sub">Gemini extracts 14 fields as JSON — streams "N fields returned"</div></div>
+    <div class="opro-step"><div class="opro-step-icon">⚖️</div><div class="opro-step-title">Judge</div><div class="opro-step-sub">Scores each field — streams accuracy + field pills live</div></div>
+    <div class="opro-step"><div class="opro-step-icon">🔧</div><div class="opro-step-title">Optimize</div><div class="opro-step-sub">Rewrites prompt for failed fields — streams char delta</div></div>
+    <div class="opro-step"><div class="opro-step-icon">🏆</div><div class="opro-step-title">Best Result</div><div class="opro-step-sub">Highest accuracy across all 3 iterations wins</div></div>
   </div>
-  <div class="opro-loop">↺ Repeats for 3 iterations — always completes all passes, selects the best-scoring extraction</div>
+  <div class="opro-loop">↺ Runs all 3 iterations regardless of early convergence — picks global best · Final prompt saved for reuse</div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════════
-     ARCHITECTURE
-══════════════════════════════════════════════════════════ -->
+<!-- ══ ARCHITECTURE ════════════════════════════════════════════ -->
 <section>
   <div class="section-label">Architecture</div>
   <h2>System architecture</h2>
-  <p class="lead">A clean two-tier architecture — React frontend communicates with a FastAPI backend over HTTP. The backend orchestrates all Gemini API calls and streams progress events back to the UI in real time.</p>
+  <p class="lead">Two-tier architecture. React frontend communicates with a FastAPI backend over HTTP/SSE. All blocking LLM calls run in thread executors to keep the async event loop free for real-time streaming. Pipeline runs persist in SQLite.</p>
 
   <div class="arch-diagram">
-
-    <div class="arch-divider">Frontend — Browser</div>
-
+    <div class="arch-divider">Frontend — Browser (React + TypeScript + Vite)</div>
     <div class="arch-row">
-      <div class="arch-box highlight">
-        <div class="arch-box-label">React UI</div>
-        <div class="arch-box-title">Upload Tab</div>
-        <div class="arch-box-sub">Drag-and-drop PDFs · Settings</div>
-      </div>
+      <div class="arch-box highlight"><div class="arch-box-label">Tab 1</div><div class="arch-box-title">Upload</div><div class="arch-box-sub">PDF drop · Settings · Mock toggle</div></div>
       <div class="arch-arrow">→</div>
-      <div class="arch-box highlight">
-        <div class="arch-box-label">React UI</div>
-        <div class="arch-box-title">Processing Tab</div>
-        <div class="arch-box-sub">Live SSE event stream · Accuracy bars</div>
-      </div>
+      <div class="arch-box highlight"><div class="arch-box-label">Tab 2</div><div class="arch-box-title">Processing</div><div class="arch-box-sub">Live SSE · Field pills · Acc bars</div></div>
       <div class="arch-arrow">→</div>
-      <div class="arch-box highlight">
-        <div class="arch-box-label">React UI</div>
-        <div class="arch-box-title">Results Tab</div>
-        <div class="arch-box-sub">Field table · Judge scores · OPRO chart</div>
-      </div>
+      <div class="arch-box highlight"><div class="arch-box-label">Tab 3</div><div class="arch-box-title">Results</div><div class="arch-box-sub">Field table · OPRO chart · Prompt export</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box pipeline"><div class="arch-box-label">Tab 4 — NEW</div><div class="arch-box-title">Pipeline</div><div class="arch-box-sub">Dashboard · Runs · Excel export</div></div>
     </div>
-
-    <div class="arch-divider">HTTP / multipart-form + SSE</div>
-
+    <div class="arch-divider">HTTP multipart + SSE stream</div>
     <div class="arch-row">
-      <div class="arch-box">
-        <div class="arch-box-label">FastAPI</div>
-        <div class="arch-box-title">POST /api/process</div>
-        <div class="arch-box-sub">Streams SSE events · Orchestrates pipeline</div>
-      </div>
+      <div class="arch-box"><div class="arch-box-label">FastAPI</div><div class="arch-box-title">POST /api/process</div><div class="arch-box-sub">Single-file SSE streaming endpoint</div></div>
+      <div class="arch-arrow">·</div>
+      <div class="arch-box pipeline"><div class="arch-box-label">FastAPI — NEW</div><div class="arch-box-title">POST /api/pipeline/runs</div><div class="arch-box-sub">Batch · SSE fan-out · Export · Delete</div></div>
     </div>
-
-    <div class="arch-divider">Backend Modules</div>
-
+    <div class="arch-divider">Backend Modules (Python)</div>
     <div class="arch-row">
-      <div class="arch-box">
-        <div class="arch-box-label">pdf_processor.py</div>
-        <div class="arch-box-title">PDF Parser</div>
-        <div class="arch-box-sub">PyMuPDF · Text extraction · Page → PNG images</div>
-      </div>
+      <div class="arch-box"><div class="arch-box-label">pdf_processor.py</div><div class="arch-box-title">PDF Parser</div><div class="arch-box-sub">PyMuPDF · Text + PNG · run_in_executor</div></div>
       <div class="arch-arrow">→</div>
-      <div class="arch-box gemini">
-        <div class="arch-box-label">extractor.py</div>
-        <div class="arch-box-title">Gemini Extractor</div>
-        <div class="arch-box-sub">14 field JSON extraction · Text + Vision</div>
-      </div>
+      <div class="arch-box gemini"><div class="arch-box-label">extractor.py</div><div class="arch-box-title">Extractor</div><div class="arch-box-sub">14-field JSON · Vision · run_in_executor</div></div>
       <div class="arch-arrow">→</div>
-      <div class="arch-box judge">
-        <div class="arch-box-label">judge.py</div>
-        <div class="arch-box-title">Gemini Judge</div>
-        <div class="arch-box-sub">Field-level scoring · Feedback generation</div>
-      </div>
+      <div class="arch-box judge"><div class="arch-box-label">judge.py</div><div class="arch-box-title">Judge</div><div class="arch-box-sub">Field scoring · Feedback · run_in_executor</div></div>
       <div class="arch-arrow">→</div>
-      <div class="arch-box opro">
-        <div class="arch-box-label">autotune.py</div>
-        <div class="arch-box-title">OPRO Optimizer</div>
-        <div class="arch-box-sub">Prompt rewriting · 3-iteration loop · Best-of-N</div>
-      </div>
+      <div class="arch-box opro"><div class="arch-box-label">autotune.py</div><div class="arch-box-title">OPRO Loop</div><div class="arch-box-sub">3 iters · Prompt rewrite · Best-of-N</div></div>
     </div>
-
-    <div class="arch-divider">Gemini API (google-genai SDK)</div>
-
     <div class="arch-row">
-      <div class="arch-box gemini">
-        <div class="arch-box-label">Model</div>
-        <div class="arch-box-title">gemini-2.5-flash</div>
-        <div class="arch-box-sub">Used for extraction, judging, and optimisation</div>
-      </div>
+      <div class="arch-box pipeline"><div class="arch-box-label">pipeline.py — NEW</div><div class="arch-box-title">Batch Engine</div><div class="arch-box-sub">Sequential · Event callback · asyncio task</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box db"><div class="arch-box-label">pipeline_store.py — NEW</div><div class="arch-box-title">SQLite Store</div><div class="arch-box-sub">Runs · Files · final_prompt · Threading lock</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box pipeline"><div class="arch-box-label">excel_export.py — NEW</div><div class="arch-box-title">Excel Export</div><div class="arch-box-sub">openpyxl · 4 sheets · Color-coded</div></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-box judge"><div class="arch-box-label">mock_data.py — NEW</div><div class="arch-box-title">Mock Engine</div><div class="arch-box-sub">Synthetic data · No LLM · 62→78→91%</div></div>
     </div>
-
+    <div class="arch-divider">Gemini API via google-genai SDK</div>
+    <div class="arch-row">
+      <div class="arch-box gemini"><div class="arch-box-label">Model (configurable via .env)</div><div class="arch-box-title">Gemini Flash</div><div class="arch-box-sub">Extraction · Judging · Optimisation</div></div>
+    </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════════
-     SEQUENCE FLOW
-══════════════════════════════════════════════════════════ -->
+<!-- ══ SEQUENCE FLOW ═══════════════════════════════════════════ -->
 <section>
   <div class="section-label">Sequence Flow</div>
-  <h2>Request lifecycle</h2>
-  <p class="lead">Full sequence from the user uploading a PDF to the final extraction result appearing in the UI.</p>
-
+  <h2>Full request lifecycle</h2>
+  <p class="lead">From PDF upload to final extraction — every step, every event, every thread boundary.</p>
   <div class="seq">
     <table class="seq-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>From</th>
-          <th></th>
-          <th>To</th>
-          <th>Action</th>
-          <th>Type</th>
-        </tr>
-      </thead>
+      <thead><tr><th>#</th><th>From</th><th></th><th>To</th><th>Action</th><th>Type</th></tr></thead>
       <tbody>
-        <tr>
-          <td><div class="seq-num">1</div></td>
-          <td><span class="seq-actor">Browser</span></td>
-          <td class="seq-arrow">→</td>
-          <td><span class="seq-actor">FastAPI</span></td>
-          <td>POST /api/process (multipart: PDFs + settings)</td>
-          <td><span class="badge badge-slate">HTTP</span></td>
-        </tr>
-        <tr>
-          <td><div class="seq-num">2</div></td>
-          <td><span class="seq-actor">FastAPI</span></td>
-          <td class="seq-arrow">→</td>
-          <td><span class="seq-actor">Browser</span></td>
-          <td>Stream open — SSE events begin flowing</td>
-          <td><span class="badge badge-indigo">SSE</span></td>
-        </tr>
-        <tr>
-          <td><div class="seq-num">3</div></td>
-          <td><span class="seq-actor">pdf_processor</span></td>
-          <td class="seq-arrow">→</td>
-          <td><span class="seq-actor">FastAPI</span></td>
-          <td>Extract text + convert pages to PNG images</td>
-          <td><span class="badge badge-slate">Local</span></td>
-        </tr>
-        <tr>
-          <td><div class="seq-num">4</div></td>
-          <td><span class="seq-actor">FastAPI</span></td>
-          <td class="seq-arrow">→</td>
-          <td><span class="seq-actor">Browser</span></td>
-          <td>SSE: pdf_extraction complete event</td>
-          <td><span class="badge badge-indigo">SSE</span></td>
-        </tr>
-        <tr>
-          <td><div class="seq-num">5</div></td>
-          <td><span class="seq-actor">extractor</span></td>
-          <td class="seq-arrow">→</td>
-          <td><span class="seq-actor">Gemini API</span></td>
-          <td>Send document + extraction prompt → receive JSON fields</td>
-          <td><span class="badge badge-blue">Gemini</span></td>
-        </tr>
-        <tr>
-          <td><div class="seq-num">6</div></td>
-          <td><span class="seq-actor">judge</span></td>
-          <td class="seq-arrow">→</td>
-          <td><span class="seq-actor">Gemini API</span></td>
-          <td>Send document + extracted fields → receive accuracy score + feedback</td>
-          <td><span class="badge badge-amber">Judge</span></td>
-        </tr>
-        <tr>
-          <td><div class="seq-num">7</div></td>
-          <td><span class="seq-actor">FastAPI</span></td>
-          <td class="seq-arrow">→</td>
-          <td><span class="seq-actor">Browser</span></td>
-          <td>SSE: iteration_complete (accuracy %, field scores)</td>
-          <td><span class="badge badge-indigo">SSE</span></td>
-        </tr>
-        <tr>
-          <td><div class="seq-num">8</div></td>
-          <td><span class="seq-actor">autotune</span></td>
-          <td class="seq-arrow">→</td>
-          <td><span class="seq-actor">Gemini API</span></td>
-          <td>Send current prompt + judge failures → receive improved prompt</td>
-          <td><span class="badge badge-green">OPRO</span></td>
-        </tr>
-        <tr>
-          <td><div class="seq-num">9</div></td>
-          <td><span class="seq-actor">—</span></td>
-          <td class="seq-arrow">↺</td>
-          <td><span class="seq-actor">—</span></td>
-          <td>Repeat steps 5–8 for iteration 2 and 3 with improved prompt</td>
-          <td><span class="badge badge-green">Loop</span></td>
-        </tr>
-        <tr>
-          <td><div class="seq-num">10</div></td>
-          <td><span class="seq-actor">FastAPI</span></td>
-          <td class="seq-arrow">→</td>
-          <td><span class="seq-actor">Browser</span></td>
-          <td>SSE: file_complete (best extraction + all iteration data)</td>
-          <td><span class="badge badge-indigo">SSE</span></td>
-        </tr>
-        <tr>
-          <td><div class="seq-num">11</div></td>
-          <td><span class="seq-actor">Browser</span></td>
-          <td class="seq-arrow">→</td>
-          <td><span class="seq-actor">Results UI</span></td>
-          <td>Render field table, accuracy gauge, OPRO trajectory chart</td>
-          <td><span class="badge badge-slate">Render</span></td>
-        </tr>
+        <tr><td><div class="seq-num">1</div></td><td><span class="seq-actor">Browser</span></td><td class="seq-arrow">→</td><td><span class="seq-actor">FastAPI</span></td><td>POST /api/process (multipart: PDFs + settings + mock_mode)</td><td><span class="badge badge-slate">HTTP</span></td></tr>
+        <tr><td><div class="seq-num">2</div></td><td><span class="seq-actor">FastAPI</span></td><td class="seq-arrow">→</td><td><span class="seq-actor">Browser</span></td><td>StreamingResponse opens — SSE events start flowing</td><td><span class="badge badge-indigo">SSE</span></td></tr>
+        <tr><td><div class="seq-num">3</div></td><td><span class="seq-actor">Thread pool</span></td><td class="seq-arrow">→</td><td><span class="seq-actor">FastAPI</span></td><td>extract_text_from_pdf() runs non-blocking in executor</td><td><span class="badge badge-slate">Thread</span></td></tr>
+        <tr><td><div class="seq-num">4</div></td><td><span class="seq-actor">FastAPI</span></td><td class="seq-arrow">→</td><td><span class="seq-actor">Browser</span></td><td>SSE: pdf_extraction_complete (N pages, text/scanned)</td><td><span class="badge badge-indigo">SSE</span></td></tr>
+        <tr><td><div class="seq-num">5</div></td><td><span class="seq-actor">FastAPI</span></td><td class="seq-arrow">→</td><td><span class="seq-actor">Browser</span></td><td>SSE: autotune_step "🔍 Calling Gemini → extracting…" [ITER N/3]</td><td><span class="badge badge-indigo">SSE</span></td></tr>
+        <tr><td><div class="seq-num">6</div></td><td><span class="seq-actor">Thread pool</span></td><td class="seq-arrow">→</td><td><span class="seq-actor">Gemini API</span></td><td>extract_fields() in executor → JSON fields returned</td><td><span class="badge badge-blue">Gemini</span></td></tr>
+        <tr><td><div class="seq-num">7</div></td><td><span class="seq-actor">FastAPI</span></td><td class="seq-arrow">→</td><td><span class="seq-actor">Browser</span></td><td>SSE: autotune_step "✓ Extraction complete — 14 fields returned"</td><td><span class="badge badge-indigo">SSE</span></td></tr>
+        <tr><td><div class="seq-num">8</div></td><td><span class="seq-actor">FastAPI</span></td><td class="seq-arrow">→</td><td><span class="seq-actor">Browser</span></td><td>SSE: autotune_step "⚖️ LLM Judge evaluating…" [ITER N/3]</td><td><span class="badge badge-indigo">SSE</span></td></tr>
+        <tr><td><div class="seq-num">9</div></td><td><span class="seq-actor">Thread pool</span></td><td class="seq-arrow">→</td><td><span class="seq-actor">Gemini API</span></td><td>judge_extraction() in executor → accuracy + field scores</td><td><span class="badge badge-amber">Judge</span></td></tr>
+        <tr><td><div class="seq-num">10</div></td><td><span class="seq-actor">FastAPI</span></td><td class="seq-arrow">→</td><td><span class="seq-actor">Browser</span></td><td>SSE: autotune_judge_result (accuracy%, ✓N ✗N ∅N failed_fields[])</td><td><span class="badge badge-indigo">SSE</span></td></tr>
+        <tr><td><div class="seq-num">11</div></td><td><span class="seq-actor">FastAPI</span></td><td class="seq-arrow">→</td><td><span class="seq-actor">Browser</span></td><td>SSE: autotune_step "🔄 Optimizer rewriting prompt (fixing: X, Y…)"</td><td><span class="badge badge-indigo">SSE</span></td></tr>
+        <tr><td><div class="seq-num">12</div></td><td><span class="seq-actor">Thread pool</span></td><td class="seq-arrow">→</td><td><span class="seq-actor">Gemini API</span></td><td>generate_content(optimizer_prompt) in executor → improved prompt</td><td><span class="badge badge-green">OPRO</span></td></tr>
+        <tr><td><div class="seq-num">13</div></td><td><span class="seq-actor">FastAPI</span></td><td class="seq-arrow">→</td><td><span class="seq-actor">Browser</span></td><td>SSE: autotune_prompt_updated (old_len → new_len chars, delta)</td><td><span class="badge badge-indigo">SSE</span></td></tr>
+        <tr><td><div class="seq-num">14</div></td><td><span class="seq-actor">—</span></td><td class="seq-arrow">↺</td><td><span class="seq-actor">—</span></td><td>Repeat steps 5–13 for iter 2 and 3</td><td><span class="badge badge-green">Loop×3</span></td></tr>
+        <tr><td><div class="seq-num">15</div></td><td><span class="seq-actor">FastAPI</span></td><td class="seq-arrow">→</td><td><span class="seq-actor">Browser</span></td><td>SSE: file_complete — best extraction + final_prompt saved to DB</td><td><span class="badge badge-indigo">SSE</span></td></tr>
+        <tr><td><div class="seq-num">16</div></td><td><span class="seq-actor">Browser</span></td><td class="seq-arrow">→</td><td><span class="seq-actor">Results UI</span></td><td>Render field table, accuracy gauge, OPRO chart, tuned prompt panel</td><td><span class="badge badge-slate">Render</span></td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════════
-     EXTRACTED FIELDS
-══════════════════════════════════════════════════════════ -->
-<section>
-  <div class="section-label">Data Model</div>
-  <h2>Extracted fields</h2>
-  <p class="lead">14 structured fields extracted from every document. Values are taken exactly as written — no normalisation — to preserve legal accuracy.</p>
-
-  <div class="fields-grid">
-    <div class="field-item">
-      <div class="field-dot" style="background:#6366f1"></div>
-      <div><div class="field-name">Loan Amount</div><div class="field-desc">Principal with currency symbol</div></div>
-    </div>
-    <div class="field-item">
-      <div class="field-dot" style="background:#6366f1"></div>
-      <div><div class="field-name">Beneficiary Name</div><div class="field-desc">Full legal name of borrower</div></div>
-    </div>
-    <div class="field-item">
-      <div class="field-dot" style="background:#4285f4"></div>
-      <div><div class="field-name">Account Number</div><div class="field-desc">Bank or loan account ID</div></div>
-    </div>
-    <div class="field-item">
-      <div class="field-dot" style="background:#4285f4"></div>
-      <div><div class="field-name">Bank Name</div><div class="field-desc">Issuing financial institution</div></div>
-    </div>
-    <div class="field-item">
-      <div class="field-dot" style="background:#10b981"></div>
-      <div><div class="field-name">Document Date</div><div class="field-desc">Date as written in document</div></div>
-    </div>
-    <div class="field-item">
-      <div class="field-dot" style="background:#10b981"></div>
-      <div><div class="field-name">Reference Number</div><div class="field-desc">Document / case / memo ID</div></div>
-    </div>
-    <div class="field-item">
-      <div class="field-dot" style="background:#f59e0b"></div>
-      <div><div class="field-name">Interest Rate</div><div class="field-desc">Rate as stated e.g. 6.5% p.a.</div></div>
-    </div>
-    <div class="field-item">
-      <div class="field-dot" style="background:#f59e0b"></div>
-      <div><div class="field-name">Loan Type</div><div class="field-desc">Term loan, revolving credit, etc.</div></div>
-    </div>
-    <div class="field-item">
-      <div class="field-dot" style="background:#ef4444"></div>
-      <div><div class="field-name">Maturity Date</div><div class="field-desc">Repayment / expiry date</div></div>
-    </div>
-    <div class="field-item">
-      <div class="field-dot" style="background:#ef4444"></div>
-      <div><div class="field-name">Credit Limit</div><div class="field-desc">Maximum facility amount</div></div>
-    </div>
-    <div class="field-item">
-      <div class="field-dot" style="background:#8b5cf6"></div>
-      <div><div class="field-name">Currency</div><div class="field-desc">USD, EUR, GBP, etc.</div></div>
-    </div>
-    <div class="field-item">
-      <div class="field-dot" style="background:#8b5cf6"></div>
-      <div><div class="field-name">Purpose</div><div class="field-desc">Stated use of loan proceeds</div></div>
-    </div>
-    <div class="field-item">
-      <div class="field-dot" style="background:#64748b"></div>
-      <div><div class="field-name">Guarantor Name</div><div class="field-desc">Co-borrower or surety</div></div>
-    </div>
-    <div class="field-item">
-      <div class="field-dot" style="background:#64748b"></div>
-      <div><div class="field-name">Collateral</div><div class="field-desc">Security / pledge description</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══════════════════════════════════════════════════════════
-     TECH STACK
-══════════════════════════════════════════════════════════ -->
+<!-- ══ TECH STACK ══════════════════════════════════════════════ -->
 <section>
   <div class="section-label">Tech Stack</div>
   <h2>Technologies used</h2>
-  <p class="lead">A modern, lightweight stack chosen for developer productivity and production readiness.</p>
+  <p class="lead">A modern lightweight stack chosen for developer productivity, real-time streaming, and production readiness.</p>
 
-  <div style="display:flex; flex-direction:column; gap:28px;">
-
+  <div style="display:flex;flex-direction:column;gap:28px;">
     <div>
       <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--slate-500);margin-bottom:12px;">Backend</p>
       <div class="tech-grid">
-        <div class="tech-card">
-          <div class="tech-icon">⚡</div>
-          <div>
-            <div class="tech-role">Web Framework</div>
-            <div class="tech-name">FastAPI</div>
-            <div class="tech-desc">Async Python API with SSE streaming and automatic OpenAPI docs</div>
-          </div>
-        </div>
-        <div class="tech-card">
-          <div class="tech-icon">📄</div>
-          <div>
-            <div class="tech-role">PDF Processing</div>
-            <div class="tech-name">PyMuPDF (fitz)</div>
-            <div class="tech-desc">Text extraction + page-to-image rendering for scanned documents</div>
-          </div>
-        </div>
-        <div class="tech-card">
-          <div class="tech-icon">🤖</div>
-          <div>
-            <div class="tech-role">AI Model</div>
-            <div class="tech-name">Gemini 2.5 Flash</div>
-            <div class="tech-desc">Extraction, judging, and prompt optimisation — all three roles</div>
-          </div>
-        </div>
-        <div class="tech-card">
-          <div class="tech-icon">🐍</div>
-          <div>
-            <div class="tech-role">SDK</div>
-            <div class="tech-name">google-genai</div>
-            <div class="tech-desc">Official Gemini Python SDK — supports text and vision inputs</div>
-          </div>
-        </div>
-        <div class="tech-card">
-          <div class="tech-icon">🖼️</div>
-          <div>
-            <div class="tech-role">Image Processing</div>
-            <div class="tech-name">Pillow</div>
-            <div class="tech-desc">PIL image handling for scanned PDF pages passed to Gemini vision</div>
-          </div>
-        </div>
-        <div class="tech-card">
-          <div class="tech-icon">🚀</div>
-          <div>
-            <div class="tech-role">ASGI Server</div>
-            <div class="tech-name">Uvicorn</div>
-            <div class="tech-desc">High-performance async server with hot-reload for development</div>
-          </div>
-        </div>
+        <div class="tech-card"><div class="tech-icon">⚡</div><div><div class="tech-role">Web Framework</div><div class="tech-name">FastAPI</div><div class="tech-desc">Async Python API with SSE streaming via StreamingResponse; thread executors for non-blocking LLM calls</div></div></div>
+        <div class="tech-card"><div class="tech-icon">📄</div><div><div class="tech-role">PDF Processing</div><div class="tech-name">PyMuPDF (fitz)</div><div class="tech-desc">Text extraction + page-to-PNG rendering; dual-mode text vs vision auto-detection per document</div></div></div>
+        <div class="tech-card"><div class="tech-icon">🤖</div><div><div class="tech-role">AI Model</div><div class="tech-name">Gemini Flash</div><div class="tech-desc">Three roles: Extractor · Judge · Optimizer. Model configurable via GEMINI_MODEL in .env</div></div></div>
+        <div class="tech-card"><div class="tech-icon">🗄️</div><div><div class="tech-role">Persistence — NEW</div><div class="tech-name">SQLite</div><div class="tech-desc">Pipeline runs and file results persisted across server restarts; threading.Lock for write safety</div></div></div>
+        <div class="tech-card"><div class="tech-icon">📊</div><div><div class="tech-role">Excel Export — NEW</div><div class="tech-name">openpyxl</div><div class="tech-desc">4-sheet workbook: Summary, Extractions, Field Accuracy (color-coded), OPRO Trajectory</div></div></div>
+        <div class="tech-card"><div class="tech-icon">🧪</div><div><div class="tech-role">Dev Tooling — NEW</div><div class="tech-name">Mock Engine</div><div class="tech-desc">mock_data.py simulates full autotune loop with realistic 62%→78%→91% accuracy — no LLM calls</div></div></div>
       </div>
     </div>
-
     <div>
       <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--slate-500);margin-bottom:12px;">Frontend</p>
       <div class="tech-grid">
-        <div class="tech-card">
-          <div class="tech-icon">⚛️</div>
-          <div>
-            <div class="tech-role">UI Framework</div>
-            <div class="tech-name">React 18</div>
-            <div class="tech-desc">Component-based UI with hooks for state and side effects</div>
-          </div>
-        </div>
-        <div class="tech-card">
-          <div class="tech-icon">🔷</div>
-          <div>
-            <div class="tech-role">Language</div>
-            <div class="tech-name">TypeScript</div>
-            <div class="tech-desc">Full type safety across components, SSE events, and API responses</div>
-          </div>
-        </div>
-        <div class="tech-card">
-          <div class="tech-icon">🎨</div>
-          <div>
-            <div class="tech-role">Styling</div>
-            <div class="tech-name">Tailwind CSS</div>
-            <div class="tech-desc">Utility-first CSS — dark theme with indigo accent colours</div>
-          </div>
-        </div>
-        <div class="tech-card">
-          <div class="tech-icon">⚡</div>
-          <div>
-            <div class="tech-role">Build Tool</div>
-            <div class="tech-name">Vite</div>
-            <div class="tech-desc">Fast HMR dev server with proxy to backend API on port 8000</div>
-          </div>
-        </div>
-        <div class="tech-card">
-          <div class="tech-icon">🔗</div>
-          <div>
-            <div class="tech-role">Streaming</div>
-            <div class="tech-name">Fetch + ReadableStream</div>
-            <div class="tech-desc">SSE consumed via fetch() streaming — no polling, no websockets</div>
-          </div>
-        </div>
-        <div class="tech-card">
-          <div class="tech-icon">🎯</div>
-          <div>
-            <div class="tech-role">Icons</div>
-            <div class="tech-name">Lucide React</div>
-            <div class="tech-desc">Consistent SVG icon set for steps, status, and navigation</div>
-          </div>
-        </div>
+        <div class="tech-card"><div class="tech-icon">⚛️</div><div><div class="tech-role">UI Framework</div><div class="tech-name">React 18 + TypeScript</div><div class="tech-desc">Component-based UI with hooks; full type safety across SSE events, pipeline types, and API responses</div></div></div>
+        <div class="tech-card"><div class="tech-icon">🎨</div><div><div class="tech-role">Styling</div><div class="tech-name">Tailwind CSS</div><div class="tech-desc">Utility-first dark theme; amber accent for mock mode; indigo/violet/emerald for pipeline states</div></div></div>
+        <div class="tech-card"><div class="tech-icon">📡</div><div><div class="tech-role">Streaming</div><div class="tech-name">Fetch + ReadableStream</div><div class="tech-desc">SSE consumed via fetch() streaming — no WebSockets, no polling, no external SSE library</div></div></div>
+        <div class="tech-card"><div class="tech-icon">⚡</div><div><div class="tech-role">Build</div><div class="tech-name">Vite</div><div class="tech-desc">Fast HMR dev server with /api proxy to backend on :8000; frontend served on :5175</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BUILT WITH CLAUDE CODE ══════════════════════════════════ -->
+<section>
+  <div class="section-label">Build Story</div>
+  <h2>Built entirely with Claude Code</h2>
+  <p class="lead">This application — backend, frontend, architecture, debugging, and documentation — was built end-to-end through a single Claude Code session using a chain of natural-language prompts. Zero manual coding.</p>
+
+  <div class="cc-hero">
+    <div class="cc-logo">🤖</div>
+    <div class="cc-headline">
+      <h3>Claude Code as a Full-Stack Engineer</h3>
+      <p>Every file in this repository was written by Claude Code in response to conversational prompts. The session spanned initial scaffolding → Gemini integration → OPRO loop → SSE streaming → pipeline feature → real-time fix → developer tooling — all in one continuous conversation with full context continuity.</p>
+    </div>
+  </div>
+
+  <div class="token-stats">
+    <div class="token-stat">
+      <div class="token-stat-val" style="color:var(--indigo-light)">~1.1M</div>
+      <div class="token-stat-label">Total Tokens</div>
+      <div class="token-stat-sub">Input + output across full session</div>
+    </div>
+    <div class="token-stat">
+      <div class="token-stat-val" style="color:var(--sky)">~880K</div>
+      <div class="token-stat-label">Input Tokens</div>
+      <div class="token-stat-sub">Code re-reads, conversation history, file contents</div>
+    </div>
+    <div class="token-stat">
+      <div class="token-stat-val" style="color:var(--emerald)">~220K</div>
+      <div class="token-stat-label">Output Tokens</div>
+      <div class="token-stat-sub">All code generated, explanations, fixes</div>
+    </div>
+    <div class="token-stat">
+      <div class="token-stat-val" style="color:var(--amber)">18</div>
+      <div class="token-stat-label">Key Prompts</div>
+      <div class="token-stat-sub">From blank canvas to full-stack app</div>
+    </div>
+    <div class="token-stat">
+      <div class="token-stat-val" style="color:var(--violet)">24</div>
+      <div class="token-stat-label">Files Created</div>
+      <div class="token-stat-sub">Backend + frontend + config + docs</div>
+    </div>
+    <div class="token-stat">
+      <div class="token-stat-val" style="color:var(--orange)">~3.2K</div>
+      <div class="token-stat-label">Lines of Code</div>
+      <div class="token-stat-sub">Python + TypeScript + HTML</div>
+    </div>
+  </div>
+
+  <h3 style="font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:24px;">The Chain of Prompts</h3>
+  <div class="prompt-chain">
+
+    <div class="prompt-item">
+      <div class="prompt-num">1</div>
+      <div class="prompt-body">
+        <div class="prompt-quote">"Need to build an app to extract elements from an unstructured PDF document… use Gemini models for both extraction and LLM-as-judge… use concepts from Andrej auto research… UI should take in one or more PDFs, while processing needs to show what step it is performing and show final extraction. Use React UI."</div>
+        <div class="prompt-result">Claude designed the full architecture and generated all initial files: <strong>pdf_processor.py, extractor.py, judge.py, autotune.py, main.py</strong> + complete React frontend with SSE streaming.</div>
+        <div class="prompt-tags"><span class="prompt-tag new">Architecture</span><span class="prompt-tag new">Full-stack scaffold</span><span class="prompt-tag new">OPRO design</span><span class="prompt-tag new">SSE streaming</span></div>
+      </div>
+    </div>
+
+    <div class="prompt-item">
+      <div class="prompt-num">2</div>
+      <div class="prompt-body">
+        <div class="prompt-quote">"set gemini api key as AIzaSy…"</div>
+        <div class="prompt-result">Created <strong>backend/.env</strong> with GEMINI_API_KEY and GEMINI_MODEL. Wired dotenv loading into FastAPI startup.</div>
+        <div class="prompt-tags"><span class="prompt-tag">Config</span></div>
+      </div>
+    </div>
+
+    <div class="prompt-item">
+      <div class="prompt-num">3</div>
+      <div class="prompt-body">
+        <div class="prompt-quote">"not able to see auto tune feature.. can we run iteratively for 3 times?"</div>
+        <div class="prompt-result">Removed the early-exit gate — autotune now always runs all 3 iterations regardless of accuracy, keeping the best result across all passes.</div>
+        <div class="prompt-tags"><span class="prompt-tag fix">Bug fix</span><span class="prompt-tag">OPRO logic</span></div>
+      </div>
+    </div>
+
+    <div class="prompt-item">
+      <div class="prompt-num">4</div>
+      <div class="prompt-body">
+        <div class="prompt-quote">"push this code to github" + username + token</div>
+        <div class="prompt-result">Initialised git repo, created .gitignore, made first commit, authenticated with GitHub token, pushed to <strong>github.com/VenkateshVengaldas/banking-pdf-extractor</strong>.</div>
+        <div class="prompt-tags"><span class="prompt-tag">Git</span><span class="prompt-tag">GitHub</span></div>
+      </div>
+    </div>
+
+    <div class="prompt-item">
+      <div class="prompt-num">5</div>
+      <div class="prompt-body">
+        <div class="prompt-quote">"steps to pull and run on another machine"</div>
+        <div class="prompt-result">Provided full setup guide. Diagnosed multiple environment issues on the second machine: SSL certificate failures, PyMuPDF ARM64 build error, pydantic version conflict, fitz module not found in wrong Python env — all fixed.</div>
+        <div class="prompt-tags"><span class="prompt-tag fix">SSL certs</span><span class="prompt-tag fix">PyMuPDF binary</span><span class="prompt-tag fix">pydantic conflict</span><span class="prompt-tag fix">venv path</span></div>
+      </div>
+    </div>
+
+    <div class="prompt-item">
+      <div class="prompt-num">6</div>
+      <div class="prompt-body">
+        <div class="prompt-quote">"what gemini model we used here to run"</div>
+        <div class="prompt-result">Diagnosed that gemini-1.5-pro (deprecated) and gemini-2.0-flash (quota exhausted) both failed. Migrated entire codebase from deprecated <strong>google-generativeai</strong> to <strong>google-genai</strong> SDK. Switched to gemini-2.5-flash.</div>
+        <div class="prompt-tags"><span class="prompt-tag fix">SDK migration</span><span class="prompt-tag fix">Model switch</span><span class="prompt-tag">google-genai</span></div>
+      </div>
+    </div>
+
+    <div class="prompt-item">
+      <div class="prompt-num">7</div>
+      <div class="prompt-body">
+        <div class="prompt-quote">"generate a html with overview of application, how it works, architecture flow, sequence flow, tech stack used, next steps"</div>
+        <div class="prompt-result">Generated the first version of this overview.html — full dark-themed single-page document with hero, architecture diagram, sequence table, tech stack, and roadmap.</div>
+        <div class="prompt-tags"><span class="prompt-tag new">Documentation</span></div>
+      </div>
+    </div>
+
+    <div class="prompt-item">
+      <div class="prompt-num">8</div>
+      <div class="prompt-body">
+        <div class="prompt-quote">"create a pipeline code which can point to folder where multiple files are dumped and process element extraction after auto tune is complete and we have final prompts, give an option to input prompts as JSON and run pipeline with them. give a dashboard to view status of run and success/failure and accuracies. final extraction can be exported to excel"</div>
+        <div class="prompt-result">Built the entire pipeline feature from scratch: <strong>pipeline_store.py</strong> (SQLite), <strong>pipeline.py</strong> (batch engine), <strong>excel_export.py</strong> (4-sheet openpyxl), 5 new FastAPI endpoints, and 4 new React components: PipelineTab, PipelineNewRun, PipelineDashboard, PipelineRunDetail.</div>
+        <div class="prompt-tags"><span class="prompt-tag new">Pipeline</span><span class="prompt-tag new">SQLite</span><span class="prompt-tag new">Excel export</span><span class="prompt-tag new">Dashboard</span></div>
+      </div>
+    </div>
+
+    <div class="prompt-item">
+      <div class="prompt-num">9</div>
+      <div class="prompt-body">
+        <div class="prompt-quote">"how to get final prompt to update json for pipeline"</div>
+        <div class="prompt-result">Added <strong>final_prompt</strong> column to SQLite (with live migration), new GET endpoint <code>/api/pipeline/runs/{id}/best-prompt</code>, and a "Get Tuned Prompt" panel in PipelineRunDetail with Copy JSON / Copy Prompt buttons.</div>
+        <div class="prompt-tags"><span class="prompt-tag new">Prompt export</span><span class="prompt-tag new">DB migration</span><span class="prompt-tag new">API endpoint</span></div>
+      </div>
+    </div>
+
+    <div class="prompt-item">
+      <div class="prompt-num">10</div>
+      <div class="prompt-body">
+        <div class="prompt-quote">"use this model gemini-3.1-flash-lite-preview"</div>
+        <div class="prompt-result">Updated GEMINI_MODEL in .env; restarted backend. Model is hot-swappable via environment variable — no code change needed.</div>
+        <div class="prompt-tags"><span class="prompt-tag">Config</span></div>
+      </div>
+    </div>
+
+    <div class="prompt-item">
+      <div class="prompt-num">11</div>
+      <div class="prompt-body">
+        <div class="prompt-quote">"in the processing pipeline I see 'Starting OPRO auto-tune — 3 iteration(s)...' which is not real-time giving which iteration it is processing. drill down this step to give real-time message on which iteration and how progress is happening, also for testing mock model response, give a toggle for developer to test with mock"</div>
+        <div class="prompt-result">Major feature update across 8 files: new granular <strong>autotune_step</strong> / <strong>autotune_judge_result</strong> events per sub-step; <strong>mock_data.py</strong> engine with realistic progression; amber mock toggle in PDFUpload; completely rewritten ProcessingPanel with field pills, prompt delta, per-step icons; TunedPromptPanel in ResultsPanel.</div>
+        <div class="prompt-tags"><span class="prompt-tag new">Granular events</span><span class="prompt-tag new">Mock mode</span><span class="prompt-tag new">Field pills</span><span class="prompt-tag new">Prompt panel</span></div>
+      </div>
+    </div>
+
+    <div class="prompt-item">
+      <div class="prompt-num">12</div>
+      <div class="prompt-body">
+        <div class="prompt-quote">[Screenshot shown] "should show each iteration running a subprocess to 'Starting OPRO auto-tune…' or else it is taking time and not knowing which step is running and not getting real-time feedback"</div>
+        <div class="prompt-result">Root-caused the issue: <strong>synchronous LLM calls were blocking the asyncio event loop</strong>, so emit() events queued up and only flushed after the whole iteration. Fix: wrapped all three blocking calls (extract_fields, judge_extraction, generate_content) in <code>run_in_executor</code> — events now stream the moment each sub-step fires.</div>
+        <div class="prompt-tags"><span class="prompt-tag fix">Critical bug</span><span class="prompt-tag fix">asyncio blocking</span><span class="prompt-tag fix">run_in_executor</span></div>
+      </div>
+    </div>
+
+    <div class="prompt-item">
+      <div class="prompt-num">13</div>
+      <div class="prompt-body">
+        <div class="prompt-quote">"update overview html with latest changes, add few screenshots to show demo and also add how this app is built using Claude Code, in terms of what were the chain of prompts, how many tokens consumed"</div>
+        <div class="prompt-result">This document — completely rebuilt overview.html with inline HTML/CSS screenshot mockups, updated architecture diagram, extended sequence table, Claude Code build story, token stats, and full prompt chain log.</div>
+        <div class="prompt-tags"><span class="prompt-tag new">Documentation</span><span class="prompt-tag new">Screenshots</span><span class="prompt-tag new">Build story</span></div>
       </div>
     </div>
 
   </div>
+
+  <div style="margin-top:40px;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:28px;">
+    <h3 style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:16px;">Key Claude Code capabilities demonstrated</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;">
+      <div style="background:var(--bg3);border-radius:10px;padding:16px;"><div style="font-weight:700;color:var(--indigo-light);margin-bottom:6px;">🏗 Full-stack Architecture</div><div style="font-size:.8rem;color:var(--slate-400)">Designed the complete system — data flow, module boundaries, async patterns, SSE fan-out — from a single prompt.</div></div>
+      <div style="background:var(--bg3);border-radius:10px;padding:16px;"><div style="font-weight:700;color:var(--emerald);margin-bottom:6px;">🔬 Root Cause Diagnosis</div><div style="font-size:.8rem;color:var(--slate-400)">Identified asyncio event-loop blocking as the root cause of missing real-time events — without being shown the bug explicitly.</div></div>
+      <div style="background:var(--bg3);border-radius:10px;padding:16px;"><div style="font-weight:700;color:var(--amber);margin-bottom:6px;">🔧 Dependency Debugging</div><div style="font-size:.8rem;color:var(--slate-400)">Resolved SSL errors, ARM64 build failures, pydantic version conflicts, venv path mismatches — each from error output alone.</div></div>
+      <div style="background:var(--bg3);border-radius:10px;padding:16px;"><div style="font-weight:700;color:var(--violet);margin-bottom:6px;">📦 Feature Expansion</div><div style="font-size:.8rem;color:var(--slate-400)">Added a complete 5-endpoint pipeline API + 4-component React dashboard in response to a single high-level feature request.</div></div>
+      <div style="background:var(--bg3);border-radius:10px;padding:16px;"><div style="font-weight:700;color:var(--sky);margin-bottom:6px;">🧪 Dev Tooling</div><div style="font-size:.8rem;color:var(--slate-400)">Designed and implemented a mock engine with realistic accuracy progression — testing infrastructure built alongside the feature.</div></div>
+      <div style="background:var(--bg3);border-radius:10px;padding:16px;"><div style="font-weight:700;color:var(--orange);margin-bottom:6px;">📝 Context Continuity</div><div style="font-size:.8rem;color:var(--slate-400)">Maintained full awareness of all 24 files, their interactions, and the conversation history across an extended multi-hour session.</div></div>
+    </div>
+  </div>
 </section>
 
-<!-- ══════════════════════════════════════════════════════════
-     NEXT STEPS
-══════════════════════════════════════════════════════════ -->
+<!-- ══ NEXT STEPS ══════════════════════════════════════════════ -->
 <section>
   <div class="section-label">Roadmap</div>
   <h2>Next steps</h2>
-  <p class="lead">The current version is a strong foundation. Here are the natural next enhancements across product, engineering, and AI dimensions.</p>
-
+  <p class="lead">Strong foundation for production. Natural next enhancements across quality, scale, and integration.</p>
   <div class="next-grid">
-
     <div class="next-card">
-      <div class="next-card-header">
-        <div class="next-card-icon" style="background:rgba(99,102,241,.15);">🎯</div>
-        <h3>Extraction Quality</h3>
-      </div>
+      <div class="next-card-header"><div class="next-card-icon" style="background:rgba(99,102,241,.15);">🎯</div><h3>Extraction Quality</h3></div>
       <ul>
-        <li>Add ground-truth upload so judge compares against known correct values</li>
-        <li>Support custom field schemas per document type (credit memo vs. LC vs. guarantee)</li>
-        <li>Table detection for documents with structured tabular data</li>
-        <li>Multi-language document support (Arabic, Chinese, etc.)</li>
+        <li>Ground-truth upload so judge compares against known correct values</li>
+        <li>Custom field schemas per document type (credit memo vs LC vs guarantee)</li>
+        <li>Table and structured section detection</li>
+        <li>Multi-language support (Arabic, Chinese, French)</li>
       </ul>
     </div>
-
     <div class="next-card">
-      <div class="next-card-header">
-        <div class="next-card-icon" style="background:rgba(16,185,129,.15);">🔄</div>
-        <h3>OPRO Optimisation</h3>
-      </div>
+      <div class="next-card-header"><div class="next-card-icon" style="background:rgba(16,185,129,.15);">🔄</div><h3>OPRO Optimisation</h3></div>
       <ul>
-        <li>Persist best-performing prompts per document type to a prompt library</li>
-        <li>Parallel iteration — run multiple prompt variants simultaneously</li>
-        <li>Few-shot example injection — automatically add successful extractions as examples</li>
+        <li>Prompt library — persist best prompts per document type</li>
+        <li>Parallel iterations — run multiple prompt variants simultaneously</li>
+        <li>Few-shot injection — auto-add successful extractions as examples</li>
         <li>Confidence scoring per field alongside accuracy</li>
       </ul>
     </div>
-
     <div class="next-card">
-      <div class="next-card-header">
-        <div class="next-card-icon" style="background:rgba(245,158,11,.15);">🏗️</div>
-        <h3>Production Readiness</h3>
-      </div>
+      <div class="next-card-header"><div class="next-card-icon" style="background:rgba(245,158,11,.15);">🏗️</div><h3>Production Readiness</h3></div>
       <ul>
-        <li>PostgreSQL / Supabase for extraction history and audit trail</li>
-        <li>Background job queue (Celery / ARQ) for large batch processing</li>
-        <li>REST API with API key auth for integration with banking systems</li>
+        <li>PostgreSQL / Supabase — replace SQLite for concurrent multi-user access</li>
+        <li>Background job queue (Celery / ARQ) for very large batches</li>
+        <li>REST API with API key auth for banking system integration</li>
         <li>Docker Compose for one-command deployment</li>
       </ul>
     </div>
-
     <div class="next-card">
-      <div class="next-card-header">
-        <div class="next-card-icon" style="background:rgba(239,68,68,.15);">📊</div>
-        <h3>Analytics & Reporting</h3>
-      </div>
+      <div class="next-card-header"><div class="next-card-icon" style="background:rgba(239,68,68,.15);">📊</div><h3>Analytics</h3></div>
       <ul>
-        <li>Extraction accuracy dashboard across all processed documents</li>
-        <li>Field-level accuracy heatmap (which fields fail most often)</li>
-        <li>Exportable results as CSV / Excel / JSON</li>
-        <li>Webhook callbacks when extraction completes</li>
+        <li>Field-level accuracy heatmap across all processed documents</li>
+        <li>Which fields fail most often — extraction quality trends over time</li>
+        <li>Webhook callbacks when pipeline run completes</li>
+        <li>Scheduled pipeline runs against watched folders</li>
       </ul>
     </div>
-
     <div class="next-card">
-      <div class="next-card-header">
-        <div class="next-card-icon" style="background:rgba(66,133,244,.15);">🔌</div>
-        <h3>Integrations</h3>
-      </div>
+      <div class="next-card-header"><div class="next-card-icon" style="background:rgba(66,133,244,.15);">🔌</div><h3>Integrations</h3></div>
       <ul>
-        <li>Direct integration with core banking systems via REST</li>
-        <li>SharePoint / Google Drive as PDF source</li>
+        <li>SharePoint / Google Drive as PDF source for pipeline</li>
         <li>Email ingestion — process PDFs received as attachments</li>
+        <li>Direct push to core banking system via REST</li>
         <li>Slack / Teams notifications on completion</li>
       </ul>
     </div>
-
     <div class="next-card">
-      <div class="next-card-header">
-        <div class="next-card-icon" style="background:rgba(168,85,247,.15);">🔒</div>
-        <h3>Security & Compliance</h3>
-      </div>
+      <div class="next-card-header"><div class="next-card-icon" style="background:rgba(168,85,247,.15);">🔒</div><h3>Security & Compliance</h3></div>
       <ul>
         <li>Role-based access control (maker / checker / admin)</li>
         <li>PII masking before sending to external AI APIs</li>
-        <li>Audit log of every extraction with user, timestamp, and changes</li>
-        <li>On-premise deployment option using locally-hosted LLMs</li>
+        <li>Full audit log — every extraction with user, timestamp, diff</li>
+        <li>On-premise deployment with locally-hosted LLMs</li>
       </ul>
     </div>
-
   </div>
 </section>
 
@@ -948,8 +990,10 @@
 
 <footer>
   <strong>Banking PDF Extractor</strong> &nbsp;·&nbsp;
-  Built with Gemini 2.5 Flash · FastAPI · React · OPRO &nbsp;·&nbsp;
-  <a href="https://github.com/VenkateshVengaldas/banking-pdf-extractor" style="color:var(--indigo-light);text-decoration:none;">github.com/VenkateshVengaldas/banking-pdf-extractor</a>
+  Built with <strong>Claude Code</strong> · Gemini Flash · FastAPI · React · OPRO &nbsp;·&nbsp;
+  <a href="https://github.com/VenkateshVengaldas/banking-pdf-extractor">github.com/VenkateshVengaldas/banking-pdf-extractor</a>
+  <br><br>
+  <span style="font-size:.78rem;">18 prompts · ~1.1M tokens · 24 files · ~3,200 lines of code · built end-to-end with Claude Code</span>
 </footer>
 
 </body>
