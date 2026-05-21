@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Using Devin for End-to-End Software Delivery in a Tier-1 Bank</title>
+<style>
+  :root {
+    --bg: #0b0f15;
+    --bg-elevated: #121826;
+    --bg-soft: #1a2233;
+    --ink: #e6edf3;
+    --ink-dim: #9aa6b2;
+    --ink-muted: #6b7785;
+    --rule: #232c3d;
+    --accent: #5aa9ff;
+    --accent-soft: rgba(90, 169, 255, 0.12);
+    --warn: #f6ad55;
+    --warn-soft: rgba(246, 173, 85, 0.10);
+    --code-bg: #0a0e16;
+    --code-ink: #cdd9e5;
+    --code-pink: #ff7ab2;
+    --shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 8px 24px rgba(0,0,0,0.35);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+  }
+
+  .wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 40px 24px 96px;
+  }
+
+  header.doc-head {
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--rule);
+  }
+  header.doc-head h1 {
+    font-size: 26px;
+    line-height: 1.25;
+    margin: 0 0 10px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  header.doc-head .subtitle {
+    color: var(--ink-dim);
+    font-size: 14.5px;
+    margin: 0;
+    max-width: 760px;
+  }
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+
+  /* Tabs */
+  .tabbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(11, 15, 21, 0.92);
+    backdrop-filter: saturate(140%) blur(8px);
+    -webkit-backdrop-filter: saturate(140%) blur(8px);
+    border-bottom: 1px solid var(--rule);
+    margin: 0 -24px 28px;
+    padding: 0 24px;
+  }
+  .tabs {
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule) transparent;
+  }
+  .tabs::-webkit-scrollbar { height: 6px; }
+  .tabs::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+
+  .tab {
+    flex: 0 0 auto;
+    padding: 12px 14px;
+    border: 0;
+    background: transparent;
+    color: var(--ink-dim);
+    font-size: 13px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .tab .num {
+    display: inline-block;
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums;
+    margin-right: 6px;
+    font-weight: 600;
+  }
+  .tab.active .num { color: var(--accent); }
+
+  /* Panels */
+  .panel { display: none; }
+  .panel.active { display: block; animation: fade 0.18s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: none; } }
+
+  h2 {
+    font-size: 22px;
+    margin: 4px 0 14px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  h3 {
+    font-size: 16px;
+    margin: 28px 0 8px;
+    color: var(--ink);
+  }
+  h4 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+    margin: 20px 0 6px;
+  }
+  p, li {
+    font-size: 14.5px;
+    color: var(--ink);
+  }
+  ul, ol { padding-left: 22px; }
+  li { margin: 5px 0; }
+  strong { color: #fff; font-weight: 600; }
+  em { color: var(--ink-dim); font-style: italic; }
+
+  code {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    background: var(--bg-soft);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--code-pink);
+    border: 1px solid var(--rule);
+  }
+  pre {
+    background: var(--code-bg);
+    color: var(--code-ink);
+    padding: 16px 18px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 12.5px;
+    line-height: 1.55;
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow);
+  }
+  pre code {
+    background: transparent;
+    border: 0;
+    color: inherit;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 8px;
+    font-size: 13.5px;
+    background: var(--bg-elevated);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  th {
+    background: var(--bg-soft);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-dim);
+  }
+  tr:last-child td { border-bottom: 0; }
+  tr:hover td { background: rgba(90, 169, 255, 0.04); }
+
+  .callout {
+    background: var(--warn-soft);
+    border-left: 3px solid var(--warn);
+    padding: 12px 16px;
+    margin: 18px 0;
+    border-radius: 4px;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .callout strong { color: var(--warn); }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--rule);
+    margin: 32px 0;
+  }
+
+  .panel-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    gap: 12px;
+  }
+  .panel-nav button {
+    flex: 1;
+    background: var(--bg-elevated);
+    color: var(--ink);
+    border: 1px solid var(--rule);
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .panel-nav button:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .panel-nav button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .panel-nav .dir {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+    margin-bottom: 4px;
+  }
+  .panel-nav .next { text-align: right; }
+
+  .footer {
+    margin-top: 56px;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-muted);
+    font-size: 12.5px;
+    font-style: italic;
+  }
+
+  /* Selection */
+  ::selection {
+    background: var(--accent);
+    color: var(--bg);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="doc-head">
+    <span class="pill">Internal Playbook · v1.0</span>
+    <h1>Using Devin for End-to-End Software Delivery in a Tier-1 Bank</h1>
+    <p class="subtitle">A practical playbook for Knowledge, Playbooks, and governance — from Product Owner requirements through development, bug fixing, and production support — for backend services (Java/Spring, Python) integrated with Jira, Bitbucket/GitHub, Jenkins, and ServiceNow.</p>
+  </header>
+
+  <nav class="tabbar" aria-label="Sections">
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-target="s1"><span class="num">1</span>Mental model</button>
+      <button class="tab" data-target="s2"><span class="num">2</span>SDLC mapping</button>
+      <button class="tab" data-target="s3"><span class="num">3</span>Knowledge</button>
+      <button class="tab" data-target="s4"><span class="num">4</span>Playbooks</button>
+      <button class="tab" data-target="s5"><span class="num">5</span>Governance</button>
+      <button class="tab" data-target="s6"><span class="num">6</span>Integration</button>
+      <button class="tab" data-target="s7"><span class="num">7</span>Rollout</button>
+      <button class="tab" data-target="s8"><span class="num">8</span>Metrics</button>
+      <button class="tab" data-target="s9"><span class="num">9</span>Risks</button>
+      <button class="tab" data-target="s10"><span class="num">10</span>Start tomorrow</button>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- 1 -->
+    <section class="panel active" id="s1">
+      <h2>1. The mental model</h2>
+      <p>Devin gives you three primitives that matter for an enterprise rollout:</p>
+      <ul>
+        <li><strong>Knowledge</strong> — persistent facts Devin retrieves contextually.</li>
+        <li><strong>Playbooks</strong> — parameterized procedures Devin executes.</li>
+        <li><strong>Sessions</strong> — actual runs, triggerable from Jira, Slack, API, or webhooks.</li>
+      </ul>
+      <p>Everything else (repo setup, secrets, machine config, integrations) is plumbing in service of those three. In a tier-1 bank you also need a fourth column running alongside:</p>
+      <ul>
+        <li><strong>Guardrails</strong> — what Devin is <em>not</em> allowed to do, encoded both in policy and in the sandbox's network/permission boundary.</li>
+      </ul>
+      <div class="callout"><strong>Reframe:</strong> Treat Devin as a junior engineer with infinite stamina, perfect recall of your standards (if you write them down), and zero judgment about your business. Knowledge and Playbooks are how you compensate for that last part.</div>
+    </section>
+
+    <!-- 2 -->
+    <section class="panel" id="s2">
+      <h2>2. Mapping Devin to the SDLC</h2>
+
+      <h3>2.1 PO raises requirements</h3>
+      <p>Don't have Devin write code from a PO's first-draft story. Have it <strong>refine</strong> the story.</p>
+      <p>A <em>Story Refinement</em> playbook takes a Jira ticket and produces:</p>
+      <ul>
+        <li>Impacted services and repos (from a codebase scan)</li>
+        <li>Proposed implementation approach</li>
+        <li>Open questions for the PO</li>
+        <li>Suggested acceptance criteria</li>
+        <li>Suggested test scenarios (happy path, edge cases, negative)</li>
+        <li>Rough effort signal (S / M / L)</li>
+      </ul>
+      <p>The PO and tech lead close out ambiguity before any code is touched. This single change usually pays for the rollout — your Definition of Ready becomes machine-enforced.</p>
+
+      <h3>2.2 Development</h3>
+      <p>Once a story is <code>Ready for Dev</code>, a Jira webhook (on status transition) triggers Devin via an <em>Implement Story</em> playbook. The playbook:</p>
+      <ol>
+        <li>Checks out a feature branch using your naming convention (e.g. <code>feature/PAY-1234-add-idempotency</code>).</li>
+        <li>Implements against the acceptance criteria.</li>
+        <li>Writes unit and integration tests.</li>
+        <li>Runs the local pipeline (SonarQube, Checkmarx, OWASP dependency check).</li>
+        <li>Opens a PR populated from your standard PR template (linked Jira, risk class, test evidence, rollback note).</li>
+      </ol>
+      <p>Critical: Devin is <strong>only the author</strong>. Segregation of duties means a human approver and the existing CI gates remain mandatory. Devin's PRs must be visually marked (a label, a bot identity) so reviewers know what they're reading.</p>
+
+      <h3>2.3 Bug fixing</h3>
+      <p>This is where Devin gets very good very quickly because the loop is tight.</p>
+      <p>A <em>Triage &amp; Fix Defect</em> playbook:</p>
+      <ol>
+        <li>Reads the Jira defect or ServiceNow incident.</li>
+        <li>Attempts to reproduce in dev.</li>
+        <li>Writes a failing test that captures the bug.</li>
+        <li>Fixes the bug.</li>
+        <li>Raises a PR linked to the defect ID.</li>
+      </ol>
+      <p>The "failing test first" discipline is enforceable through the playbook — much easier than enforcing it through code review.</p>
+
+      <h3>2.4 Production support</h3>
+      <p>In a tier-1 bank, Devin should have <strong>no write access to production</strong>. Period.</p>
+      <p>What Devin <em>can</em> do is investigate. A <em>Prod Incident Investigation</em> playbook:</p>
+      <ol>
+        <li>Pulls approved log/metric slices via your observability stack.</li>
+        <li>Summarises what it found.</li>
+        <li>Proposes a hypothesis and a blast-radius estimate.</li>
+        <li>Drafts a hotfix PR against the dev branch for human review.</li>
+        <li>Drafts an RCA skeleton and posts it to the ServiceNow incident.</li>
+      </ol>
+      <p>The human always commands the deploy. Devin never bypasses change management.</p>
+    </section>
+
+    <!-- 3 -->
+    <section class="panel" id="s3">
+      <h2>3. Knowledge architecture</h2>
+      <p>Treat Knowledge like a curated library, not a wiki.</p>
+
+      <h3>3.1 Three rules</h3>
+      <ol>
+        <li><strong>Tier by scope.</strong> Global → Domain → Repo → Service. Devin retrieves contextually, but you control scope via repo configuration.</li>
+        <li><strong>Categorize consistently.</strong> Standards, Patterns, Architecture, Tools, Pitfalls, Glossary. One category per entry.</li>
+        <li><strong>One assertion per entry.</strong> Long entries do not retrieve well.</li>
+      </ol>
+
+      <h3>3.2 Day-one seed list — Java/Spring backend</h3>
+      <table>
+        <thead><tr><th style="width: 130px">Category</th><th>Example entry</th></tr></thead>
+        <tbody>
+          <tr><td>Standards</td><td>Use <code>BigDecimal</code> (with <code>MathContext.DECIMAL64</code>) for all monetary amounts. Never <code>float</code> / <code>double</code>.</td></tr>
+          <tr><td>Standards</td><td>Currency-converted amounts persist amount, currency, FX rate, and FX rate timestamp.</td></tr>
+          <tr><td>Patterns</td><td>Idempotency: use <code>X-Idempotency-Key</code> header; dedup table <code>idempotency_keys</code> with 24h TTL.</td></tr>
+          <tr><td>Patterns</td><td>Audit logging: every PII-touching endpoint emits <code>AuditEvent</code> with <code>actor</code>, <code>subjectClass</code>, <code>eventCode</code>.</td></tr>
+          <tr><td>Architecture</td><td>Repository pattern only. No JPQL/SQL inside service classes.</td></tr>
+          <tr><td>Architecture</td><td><code>@Transactional</code> propagation defaults to REQUIRED; cross-aggregate writes need explicit justification in PR.</td></tr>
+          <tr><td>Tools</td><td>DB migrations via Flyway; filenames <code>V{epoch}__{snake_case_description}.sql</code>.</td></tr>
+          <tr><td>Tools</td><td>Secrets from CyberArk via the <code>vault-spring-starter</code>; never <code>@Value</code> against env vars for secrets.</td></tr>
+          <tr><td>Pitfalls</td><td>Time handling: store <code>Instant</code> in UTC; convert at boundaries only. Never <code>LocalDateTime</code> for events.</td></tr>
+          <tr><td>Pitfalls</td><td>Logging: never log full PAN, IBAN, or BIC; use the <code>MaskedField</code> annotation.</td></tr>
+          <tr><td>Glossary</td><td>Settlement date = the date on which the exchange of cash and security occurs. Distinct from trade date.</td></tr>
+          <tr><td>Glossary</td><td>T+2 = settlement two business days after trade date, per the local market calendar.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>3.3 Day-one seed list — Python backend</h3>
+      <table>
+        <thead><tr><th style="width: 130px">Category</th><th>Example entry</th></tr></thead>
+        <tbody>
+          <tr><td>Standards</td><td>Monetary amounts use <code>decimal.Decimal</code> configured via <code>decimal.localcontext(prec=28)</code>. Never <code>float</code>.</td></tr>
+          <tr><td>Standards</td><td>All HTTP handlers must return RFC 7807 problem-details on error.</td></tr>
+          <tr><td>Patterns</td><td>Async I/O: use <code>httpx.AsyncClient</code> with a shared connection pool, never per-request clients.</td></tr>
+          <tr><td>Architecture</td><td>One module per bounded context. Cross-context calls go through a published interface.</td></tr>
+          <tr><td>Tools</td><td>Dependency management via <code>uv</code>; lockfile committed. <code>pip install</code> outside <code>uv</code> is forbidden.</td></tr>
+          <tr><td>Tools</td><td>Migrations via Alembic; one head per service.</td></tr>
+          <tr><td>Pitfalls</td><td>Timezone: store <code>datetime</code> in UTC with <code>tzinfo=timezone.utc</code>. Reject naive datetimes at API boundary.</td></tr>
+          <tr><td>Pitfalls</td><td>SQL: only via SQLAlchemy Core or ORM; raw <code>text()</code> requires explicit param binding and a code-review note.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>3.4 Maintenance</h3>
+      <ul>
+        <li>Assign an owner per domain.</li>
+        <li>Run a <strong>quarterly review</strong>: prune stale entries, merge duplicates, flag contradictions with current code.</li>
+        <li>Drift is the silent killer. Treat Knowledge like production config.</li>
+      </ul>
+    </section>
+
+    <!-- 4 -->
+    <section class="panel" id="s4">
+      <h2>4. Playbook architecture</h2>
+      <p>A two-layer design works best.</p>
+
+      <h3>4.1 Atomic playbooks (single-purpose, parameterised)</h3>
+      <ul>
+        <li><code>pr.open-from-template</code> — open a PR using the house template.</li>
+        <li><code>scan.security-suite</code> — run SonarQube + Checkmarx + OWASP DC, attach results to PR.</li>
+        <li><code>tests.generate-data</code> — generate fixture data conforming to a schema.</li>
+        <li><code>jira.post-progress</code> — append progress summary to a Jira ticket.</li>
+        <li><code>slack.notify-channel</code> — post status to a Slack channel.</li>
+      </ul>
+
+      <h3>4.2 Composite playbooks (chain atomics for an SDLC stage)</h3>
+      <ul>
+        <li><code>story.refine</code> — Story Refinement (see §2.1).</li>
+        <li><code>story.implement</code> — Implement Story (see §2.2).</li>
+        <li><code>defect.triage-and-fix</code> — Triage &amp; Fix Defect (see §2.3).</li>
+        <li><code>incident.investigate</code> — Prod Incident Investigation (see §2.4).</li>
+        <li><code>deps.upgrade</code> — Dependency upgrade (CVE-driven or scheduled).</li>
+        <li><code>debt.refactor</code> — Tech-debt refactor against a specific Knowledge entry.</li>
+      </ul>
+
+      <h3>4.3 Triggers</h3>
+      <table>
+        <thead><tr><th>Trigger</th><th>Surface</th><th>Good for</th></tr></thead>
+        <tbody>
+          <tr><td>Jira webhook on <code>Ready for Dev</code></td><td>Jira</td><td><code>story.implement</code></td></tr>
+          <tr><td>Jira webhook on <code>Bug — Triaged</code></td><td>Jira</td><td><code>defect.triage-and-fix</code></td></tr>
+          <tr><td>ServiceNow incident <code>P3/P4 — Investigate</code></td><td>ServiceNow</td><td><code>incident.investigate</code></td></tr>
+          <tr><td>Slack slash-command</td><td>Slack</td><td>Ad-hoc, e.g. <code>/devin refine PAY-1234</code></td></tr>
+          <tr><td>Scheduled (cron)</td><td>Devin</td><td><code>deps.upgrade</code> (weekly)</td></tr>
+        </tbody>
+      </table>
+      <p>Avoid letting people start sessions through three different surfaces with three different playbooks — you will lose traceability.</p>
+
+      <h3>4.4 A sample playbook spec</h3>
+      <pre><code>name: story.implement
+inputs:
+  jira_ticket_id: string (required)
+  target_branch: string (default: develop)
+preconditions:
+  - Ticket status must be "Ready for Dev"
+  - Ticket must have acceptance criteria populated
+  - Ticket must be linked to a single component (repo)
+steps:
+  1. jira.fetch_ticket(jira_ticket_id)
+  2. repo.checkout(component_repo, base=target_branch, branch=naming_convention(jira_ticket_id))
+  3. implement_against_ac(ticket.acceptance_criteria)
+  4. tests.write_unit_and_integration()
+  5. scan.security-suite()
+  6. ci.run_pipeline_local()
+  7. pr.open-from-template(linked_jira=jira_ticket_id, risk_class=auto, rollback_note=auto)
+  8. jira.post-progress(jira_ticket_id, status="In Review", pr_link=...)
+postconditions:
+  - PR exists, labeled "devin-author"
+  - All required CI checks pass
+  - Jira transitioned to "In Review"
+failure_modes:
+  - On CI failure: attempt one self-heal; if still failing, comment on Jira and stop.
+  - On test gap detected: do not raise PR; comment on Jira with proposed AC clarifications.</code></pre>
+    </section>
+
+    <!-- 5 -->
+    <section class="panel" id="s5">
+      <h2>5. Tier-1 bank governance overlay</h2>
+      <p>Non-negotiables to bake in <strong>before</strong> pilot:</p>
+      <ul>
+        <li>Devin's sandbox runs in a <strong>VPC</strong> with egress restricted to your repos, Jira, Jenkins, package registries, and approved AI providers. No general internet.</li>
+        <li>Devin uses your <strong>secrets vault</strong> (CyberArk / HashiCorp). Never environment-baked credentials.</li>
+        <li>Every session is <strong>bound to a Jira/ServiceNow ID</strong>. No anonymous work.</li>
+        <li>Every Devin PR is <strong>identifiable</strong> (bot identity + label) and subject to the same SAST/SCA/SonarQube gates as human PRs, with <strong>no override</strong>.</li>
+        <li><strong>Production access</strong>: read-only at most (logs, metrics, traces via observability tooling). Never write. Never deploy.</li>
+        <li><strong>Audit log</strong>: session prompts, tool calls, file diffs, and PR outcomes retained for the period your audit function requires (typically 7 years for SOX-equivalent regimes).</li>
+        <li><strong>Model and data residency</strong>: confirm with InfoSec which Devin model endpoints are approved and where session data is processed.</li>
+      </ul>
+
+      <h3>5.1 Branch-protection rules to enforce</h3>
+      <ul>
+        <li>Required reviewers: ≥ 2 humans for any PR authored by <code>devin-bot</code>.</li>
+        <li>Required CI checks: build, unit tests, integration tests, SonarQube quality gate, Checkmarx high-severity = 0, OWASP DC high-severity = 0.</li>
+        <li>Disallow merges where author and approver are both bots.</li>
+        <li>Signed commits required.</li>
+      </ul>
+    </section>
+
+    <!-- 6 -->
+    <section class="panel" id="s6">
+      <h2>6. Integration with existing tooling</h2>
+
+      <h3>6.1 Jira</h3>
+      <ul>
+        <li>Reads tickets, posts progress as comments, transitions status.</li>
+        <li>Webhook on transition to <code>Ready for Dev</code> triggers <code>story.implement</code>.</li>
+        <li>Webhook on transition to <code>Bug — Triaged</code> triggers <code>defect.triage-and-fix</code>.</li>
+        <li>Devin never closes a ticket — only humans transition to <code>Done</code>.</li>
+      </ul>
+
+      <h3>6.2 Bitbucket / GitHub</h3>
+      <ul>
+        <li>Service account <code>devin-bot</code> with the minimum required permissions.</li>
+        <li>Branch protection enforces PR + human approvers (see §5.1).</li>
+        <li>PR template is mandatory; Devin populates it.</li>
+        <li>Devin reacts to PR comments (re-implements, adds tests) but cannot resolve a "Request Changes" review — only the human reviewer can.</li>
+      </ul>
+
+      <h3>6.3 Jenkins</h3>
+      <ul>
+        <li>Devin triggers pipelines and reads results.</li>
+        <li>Devin reacts to obvious failures (lint, formatting, simple test failures) and retries once.</li>
+        <li>Devin does <strong>not</strong> approve deployment stages.</li>
+      </ul>
+
+      <h3>6.4 ServiceNow</h3>
+      <ul>
+        <li>Devin reads incidents and posts investigation findings.</li>
+        <li>Change requests are still human-authored and human-approved.</li>
+        <li>Devin can pre-populate a CR draft; a human must submit.</li>
+      </ul>
+    </section>
+
+    <!-- 7 -->
+    <section class="panel" id="s7">
+      <h2>7. Rollout sequence</h2>
+      <table>
+        <thead><tr><th>Phase</th><th>Duration</th><th>Scope</th><th>Exit criteria</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1 — Foundation</strong></td><td>Weeks 1–6</td><td>One squad, one repo. Story refinement and unit-test generation only.</td><td>Knowledge base ≥ 30 entries; ≥ 80% of stories show a useful refinement output; squad NPS positive.</td></tr>
+          <tr><td><strong>2 — Implement</strong></td><td>Months 2–4</td><td>Same squad, full story implementation in dev. All PRs human-reviewed.</td><td>≥ 50% of "Ready for Dev" stories opened as Devin PRs; PR rework rate ≤ team average.</td></tr>
+          <tr><td><strong>3 — Expand</strong></td><td>Months 4–9</td><td>Add bug fixing on low-severity defects; prod incident investigation in read-only mode. Add a second squad.</td><td>Defect MTTR reduced; no governance incidents.</td></tr>
+          <tr><td><strong>4 — Scale</strong></td><td>Months 9+</td><td>Domain-wide rollout. Cross-team Knowledge curation function established.</td><td>Adoption across the domain; audit sign-off on the operating model.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 8 -->
+    <section class="panel" id="s8">
+      <h2>8. Metrics that matter</h2>
+      <p>Track from day one — without baseline you cannot defend the investment.</p>
+      <ul>
+        <li><strong>Refinement quality</strong>: % of refined stories that pass DoR without further rework.</li>
+        <li><strong>PR rework rate</strong>: # of "Request Changes" rounds per Devin PR vs human PR.</li>
+        <li><strong>Cycle time</strong>: ticket <code>Ready for Dev</code> → <code>In Review</code>, Devin vs human baseline.</li>
+        <li><strong>Defect MTTR</strong>: bug <code>Triaged</code> → PR merged, Devin vs human baseline.</li>
+        <li><strong>Escape rate</strong>: defects found in UAT/Prod traced to Devin PRs vs human PRs.</li>
+        <li><strong>Governance incidents</strong>: count of policy/guardrail breaches (target: zero).</li>
+        <li><strong>Knowledge health</strong>: stale entry count, contradictions found per quarterly review.</li>
+      </ul>
+    </section>
+
+    <!-- 9 -->
+    <section class="panel" id="s9">
+      <h2>9. Risks and mitigations</h2>
+      <table>
+        <thead><tr><th>Risk</th><th>Mitigation</th></tr></thead>
+        <tbody>
+          <tr><td>Hallucinated APIs / class names</td><td>Strong repo setup so Devin must compile before raising a PR. Block PRs that fail to build.</td></tr>
+          <tr><td>Over-confident PR that passes tests but misses business edge case</td><td>Force PO into the loop at refinement; require explicit AC sign-off before <code>story.implement</code>.</td></tr>
+          <tr><td>Knowledge drift</td><td>Quarterly review with a named owner. Treat as production config.</td></tr>
+          <tr><td>Knowledge sprawl</td><td>Enforce the one-assertion rule. Reject overlapping entries at review.</td></tr>
+          <tr><td>Developer perception ("it's replacing us")</td><td>Frame as "Devin handles toil, you focus on design and judgment." Back it up: protect senior engineers' time for architecture work.</td></tr>
+          <tr><td>Audit / regulator concern</td><td>Audit log retention, signed commits, branch protection, no prod write access. Pre-brief the model with second-line risk and internal audit.</td></tr>
+          <tr><td>Cost runaway</td><td>Per-session and per-team token budgets. Weekly cost review during pilot.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 10 -->
+    <section class="panel" id="s10">
+      <h2>10. Where to start tomorrow</h2>
+      <ol>
+        <li>Pick <strong>one squad</strong> with a clean repo and a supportive tech lead.</li>
+        <li>Stand up the Devin sandbox in your VPC, wire it to that one repo, Jira project, and Jenkins job.</li>
+        <li>Draft the first <strong>20 Knowledge entries</strong> from §3.2 / §3.3 and review them with the squad.</li>
+        <li>Implement <strong>two atomic playbooks</strong> (<code>pr.open-from-template</code>, <code>jira.post-progress</code>) and one composite (<code>story.refine</code>).</li>
+        <li>Run <code>story.refine</code> against every new story for two sprints. Measure refinement quality.</li>
+        <li>Only then add <code>story.implement</code>.</li>
+      </ol>
+      <div class="callout"><strong>Caution:</strong> Resist the temptation to enable everything at once. The bank's risk surface is larger than the productivity upside of a fast launch.</div>
+    </section>
+
+    <nav class="panel-nav" aria-label="Pagination">
+      <button id="prevBtn">
+        <div class="dir">← Previous</div>
+        <div id="prevLabel">—</div>
+      </button>
+      <button id="nextBtn" class="next">
+        <div class="dir">Next →</div>
+        <div id="nextLabel">—</div>
+      </button>
+    </nav>
+
+    <div class="footer">Document version 1.0 — May 2026.</div>
+  </main>
+</div>
+
+<script>
+  (function () {
+    const tabs = Array.from(document.querySelectorAll('.tab'));
+    const panels = Array.from(document.querySelectorAll('.panel'));
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const prevLabel = document.getElementById('prevLabel');
+    const nextLabel = document.getElementById('nextLabel');
+
+    function activate(idx, push) {
+      idx = Math.max(0, Math.min(tabs.length - 1, idx));
+      tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
+      panels.forEach((p, i) => p.classList.toggle('active', i === idx));
+
+      prevBtn.disabled = idx === 0;
+      nextBtn.disabled = idx === tabs.length - 1;
+      prevLabel.textContent = idx > 0 ? tabs[idx - 1].textContent.trim() : '—';
+      nextLabel.textContent = idx < tabs.length - 1 ? tabs[idx + 1].textContent.trim() : '—';
+
+      // Bring active tab into view in horizontally-scrolling tabbar
+      tabs[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
+      // Scroll body to top of content area
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (push) {
+        const id = tabs[idx].getAttribute('data-target');
+        history.replaceState(null, '', '#' + id);
+      }
+    }
+
+    tabs.forEach((t, i) => t.addEventListener('click', () => activate(i, true)));
+    prevBtn.addEventListener('click', () => {
+      const cur = tabs.findIndex(t => t.classList.contains('active'));
+      activate(cur - 1, true);
+    });
+    nextBtn.addEventListener('click', () => {
+      const cur = tabs.findIndex(t => t.classList.contains('active'));
+      activate(cur + 1, true);
+    });
+
+    // Keyboard: left/right arrows when not in input
+    document.addEventListener('keydown', (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+      const cur = tabs.findIndex(t => t.classList.contains('active'));
+      if (e.key === 'ArrowLeft') { activate(cur - 1, true); e.preventDefault(); }
+      if (e.key === 'ArrowRight') { activate(cur + 1, true); e.preventDefault(); }
+    });
+
+    // Deep-link support
+    const hash = (location.hash || '').replace('#', '');
+    if (hash) {
+      const idx = tabs.findIndex(t => t.getAttribute('data-target') === hash);
+      if (idx >= 0) activate(idx, false);
+      else activate(0, false);
+    } else {
+      activate(0, false);
+    }
+  })();
+</script>
+
+</body>
+</html>
